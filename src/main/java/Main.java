@@ -6,13 +6,17 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         GameField field = new GameField();
         System.out.println("First player is always X, insert coordinates...");
-        while (true){
+        while (true) {
             int row = scanner.nextInt();
             int column = scanner.nextInt();
+            if (row >= 3 | column >= 3) {
+                System.out.println("Wrong cell location, try one more time...");
+                continue;
+            }
             field.write(row, column);
             field.generateBoard();
             field.userMoveStatus();
-            if (field.checkForWinner()){
+            if (field.checkForWinner()) {
                 break;
             }
         }
