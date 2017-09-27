@@ -17,11 +17,15 @@ public class Main {
             }
             field.write(row, column);
             field.generateBoard();
+            if (field.checkForWinner()){
+                break;
+            }
             System.out.println("Another user turn...");
             TimeUnit.SECONDS.sleep(1);
             field.generateMove();
             field.generateBoard();
             field.userMoveStatus();
+            System.out.println("Another user turn...");
         }
     }
 }

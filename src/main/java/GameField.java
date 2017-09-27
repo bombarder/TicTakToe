@@ -2,7 +2,7 @@
 class GameField {
 
     private int userStep = 1;
-    int[][] board = new int[3][3];
+    private int[][] board = new int[3][3];
     private boolean flag;
 
     void write(int row, int column) {
@@ -63,8 +63,6 @@ class GameField {
         } else if (board[0][2] != 0 & (board[0][2] == board[1][2] & board[0][2] == board[2][2])) {
             System.out.println("We have a winner!!!");
             return true;
-        } else {
-            System.out.println("Another user turn....");
         }
         return false;
     }
