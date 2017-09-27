@@ -20,11 +20,19 @@ public class Main {
             if (field.checkForWinner()){
                 break;
             }
+            if (!field.checkForEmptySpaceOnBoard()){
+                System.out.println("There is no empty space on board...");
+                break;
+            }
             System.out.println("Another user turn...");
             TimeUnit.SECONDS.sleep(1);
             field.generateMove();
             field.generateBoard();
             field.userMoveStatus();
+            if (!field.checkForEmptySpaceOnBoard()){
+                System.out.println("There is no empty space on board...");
+                break;
+            }
             System.out.println("Another user turn...");
         }
     }

@@ -77,14 +77,24 @@ class GameField {
         }
     }
 
-    void generateMove(){
+    void generateMove() {
         int randomX = (int) (Math.random() * 3);
         int randomO = (int) (Math.random() * 3);
-        if (board[randomX][randomO] == 0){
+        if (board[randomX][randomO] == 0) {
             userMoveStatus();
             board[randomX][randomO] = userStep;
         } else {
             generateMove();
         }
+    }
+
+    boolean checkForEmptySpaceOnBoard() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == 0) {
+                    return true;
+                }
+            }
+        } return false;
     }
 }
