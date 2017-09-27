@@ -2,7 +2,7 @@
 class GameField {
 
     private int userStep = 1;
-    private int[][] board = new int[3][3];
+    int[][] board = new int[3][3];
     private boolean flag;
 
     void write(int row, int column) {
@@ -76,6 +76,17 @@ class GameField {
         } else {
             userStep = 2;
             flag = true;
+        }
+    }
+
+    void generateMove(){
+        int randomX = (int) (Math.random() * 3);
+        int randomO = (int) (Math.random() * 3);
+        if (board[randomX][randomO] == 0){
+            userMoveStatus();
+            board[randomX][randomO] = userStep;
+        } else {
+            generateMove();
         }
     }
 }
