@@ -1,39 +1,30 @@
-import java.util.Scanner;
+
 import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
 
-        Scanner scanner = new Scanner(System.in);
+        System.out.println("War of bots started...");
         GameField field = new GameField();
-        System.out.println("First player is always X, insert coordinates...");
 
         while (!field.checkForWinner()) {
-            int row = scanner.nextInt();
-            int column = scanner.nextInt();
-            if (row > 2 | column > 2) {
-                System.out.println("Wrong cell location, try one more time...");
-                continue;
-            }
-            field.write(row, column);
-            field.generateBoard();
-            if (field.checkForWinner()){
-                break;
-            }
-            if (!field.checkForEmptySpaceOnBoard()){
-                System.out.println("There is no empty space on board...");
-                break;
-            }
-            System.out.println("Another user turn...");
-            TimeUnit.SECONDS.sleep(1);
-            field.generateMove();
-            field.generateBoard();
-            field.userMoveStatus();
-            if (!field.checkForEmptySpaceOnBoard()){
-                System.out.println("There is no empty space on board...");
-                break;
-            }
-            System.out.println("Another user turn...");
+            if (userMove(field)) break;
+            if (userMove(field)) break;
         }
+    }
+
+    private static boolean userMove(GameField field) throws InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
+        field.generateMove();
+        field.generateBoard();
+        if (field.checkForWinner()){
+            return true;
+        }
+        if (!field.checkForEmptySpaceOnBoard()){
+            System.out.println("There is no empty space on board...");
+            return true;
+        }
+        System.out.println("Another user turn...");
+        return false;
     }
 }

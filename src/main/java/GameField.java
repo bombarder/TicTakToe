@@ -5,21 +5,12 @@ class GameField {
     private int[][] board = new int[3][3];
     private boolean flag;
 
-    void write(int row, int column) {
-        if (board[row][column] != 0) {
-            System.out.println("Cell is busy, find another one...");
-            userMoveStatus();
-        } else {
-            board[row][column] = userStep;
-        }
-    }
-
     void generateBoard() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] == 1) {
+                if (board[i][j] == 2) {
                     System.out.print(" x ");
-                } else if (board[i][j] == 2) {
+                } else if (board[i][j] == 1) {
                     System.out.print(" o ");
                 } else {
                     System.out.print("   ");
@@ -67,7 +58,7 @@ class GameField {
         return false;
     }
 
-    void userMoveStatus() {
+    private void userMoveStatus() {
         if (flag) {
             userStep = 1;
             flag = false;
@@ -89,12 +80,13 @@ class GameField {
     }
 
     boolean checkForEmptySpaceOnBoard() {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] == 0) {
+        for (int[] aBoard : board) {
+            for (int anABoard : aBoard) {
+                if (anABoard == 0) {
                     return true;
                 }
             }
-        } return false;
+        }
+        return false;
     }
 }
