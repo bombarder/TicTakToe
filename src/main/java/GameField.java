@@ -14,16 +14,19 @@ class GameField implements ActionListener {
         JFrame frame = new JFrame("Tic Tac Toe");
         frame.setSize(400, 400);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        JPanel panel = new JPanel();
+
+        JPanel gamePanel = new JPanel();
         GridLayout gridLayout = new GridLayout(3, 3);
-        panel.setLayout(gridLayout);
+        gamePanel.setLayout(gridLayout);
+
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new Button(i);
-            buttons[i].setFont(new Font("Arial", Font.PLAIN,40));
+            buttons[i].setFont(new Font("Arial", Font.PLAIN, 40));
             buttons[i].addActionListener(this);
-            panel.add(buttons[i]);
+            gamePanel.add(buttons[i]);
         }
-        frame.add(panel);
+
+        frame.add(gamePanel);
         frame.setVisible(true);
     }
 
@@ -91,9 +94,6 @@ class GameField implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         for (Button button : buttons) {
             if (event.getSource() == button) {
-                if (!checkForEmptySpaceOnBoard()) {
-                    System.out.println("Game over, there is no empty space on board!");
-                }
                 if (button == buttons[0]) {
                     board[0][0] = userStep;
                     button.setText(convertBoardCellValue(0, 0));
@@ -122,11 +122,21 @@ class GameField implements ActionListener {
                     board[2][2] = userStep;
                     button.setText(convertBoardCellValue(2, 2));
                 }
+                if (!checkForEmptySpaceOnBoard()) {
+                    infoBox("Game over, there is no empty space on board!", "Attention:");
+//                    System.out.println("Game over, there is no empty space on board!");
+                }
                 if (checkForWinner()) {
-                    System.out.println("we have a winner!!!");
+                    infoBox("we have a winner!!!", "Attention:");
+//                    System.out.println("we have a winner!!!");
                 }
                 userMoveStatus();
             }
         }
+    }
+
+    public static void infoBox(String infoMessage, String titleBar) {
+        JOptionPane.showMessageDialog(null, infoMessage,
+                "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
     }
 }
