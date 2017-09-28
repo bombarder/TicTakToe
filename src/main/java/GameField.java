@@ -7,17 +7,18 @@ class GameField implements ActionListener {
 
     private int userStep = 1;
     private static int[][] board = new int[3][3];
-    private static Buttons[] buttons = new Buttons[9];
+    private static Button[] buttons = new Button[9];
     private boolean flag;
 
     GameField() {
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame("Tic Tac Toe");
         frame.setSize(400, 400);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JPanel panel = new JPanel();
         GridLayout gridLayout = new GridLayout(3, 3);
         panel.setLayout(gridLayout);
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = new Buttons(i);
+            buttons[i] = new Button(i);
             buttons[i].addActionListener(this);
             panel.add(buttons[i]);
         }
@@ -33,30 +34,22 @@ class GameField implements ActionListener {
         }
     }
 
-    boolean checkForWinner() {
+    private boolean checkForWinner() {
         if (board[0][0] != 0 & (board[0][0] == board[0][1] & board[0][0] == board[0][2])) {
-            System.out.println("We have a winner!!!");
             return true;
         } else if (board[1][0] != 0 & (board[1][0] == board[1][1] & board[1][0] == board[1][2])) {
-            System.out.println("We have a winner!!!");
             return true;
         } else if (board[2][0] != 0 & (board[2][0] == board[2][1] & board[2][0] == board[2][2])) {
-            System.out.println("We have a winner!!!");
             return true;
         } else if (board[0][0] != 0 & (board[0][0] == board[1][1] & board[0][0] == board[2][2])) {
-            System.out.println("We have a winner!!!");
             return true;
         } else if (board[2][0] != 0 & (board[2][0] == board[1][1] & board[2][0] == board[0][2])) {
-            System.out.println("We have a winner!!!");
             return true;
         } else if (board[0][0] != 0 & (board[0][0] == board[1][0] & board[0][0] == board[2][0])) {
-            System.out.println("We have a winner!!!");
             return true;
         } else if (board[0][1] != 0 & (board[0][1] == board[1][1] & board[0][1] == board[2][1])) {
-            System.out.println("We have a winner!!!");
             return true;
         } else if (board[0][2] != 0 & (board[0][2] == board[1][2] & board[0][2] == board[2][2])) {
-            System.out.println("We have a winner!!!");
             return true;
         }
         return false;
@@ -95,96 +88,44 @@ class GameField implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent event) {
-        if (event.getSource() == buttons[0]) {
-            if (!checkForEmptySpaceOnBoard()) {
-                System.out.println("Game over, there is no empty space on board!");
+        for (Button button : buttons) {
+            if (event.getSource() == button) {
+                if (!checkForEmptySpaceOnBoard()) {
+                    System.out.println("Game over, there is no empty space on board!");
+                }
+                if (button == buttons[0]) {
+                    board[0][0] = userStep;
+                    button.setText(convertBoardCellValue(0, 0));
+                } else if (button == buttons[1]) {
+                    board[0][1] = userStep;
+                    button.setText(convertBoardCellValue(0, 1));
+                } else if (button == buttons[2]) {
+                    board[0][2] = userStep;
+                    button.setText(convertBoardCellValue(0, 2));
+                } else if (button == buttons[3]) {
+                    board[1][0] = userStep;
+                    button.setText(convertBoardCellValue(1, 0));
+                } else if (button == buttons[4]) {
+                    board[1][1] = userStep;
+                    button.setText(convertBoardCellValue(1, 1));
+                } else if (button == buttons[5]) {
+                    board[1][2] = userStep;
+                    button.setText(convertBoardCellValue(1, 2));
+                } else if (button == buttons[6]) {
+                    board[2][0] = userStep;
+                    button.setText(convertBoardCellValue(2, 0));
+                } else if (button == buttons[7]) {
+                    board[2][1] = userStep;
+                    button.setText(convertBoardCellValue(2, 1));
+                } else if (button == buttons[8]) {
+                    board[2][2] = userStep;
+                    button.setText(convertBoardCellValue(2, 2));
+                }
+                if (checkForWinner()) {
+                    System.out.println("we have a winner!!!");
+                }
+                userMoveStatus();
             }
-            board[0][0] = userStep;
-            if (checkForWinner()) {
-                System.out.println("we have a winner!!!");
-            }
-            buttons[0].setText(convertBoardCellValue(0, 0));
-            userMoveStatus();
-        } else if (event.getSource() == buttons[1]) {
-            if (!checkForEmptySpaceOnBoard()) {
-                System.out.println("Game over, there is no empty space on board!");
-            }
-            board[0][1] = userStep;
-            if (checkForWinner()) {
-                System.out.println("we have a winner!!!");
-            }
-            buttons[1].setText(convertBoardCellValue(0, 1));
-            userMoveStatus();
-        } else if (event.getSource() == buttons[2]) {
-            if (!checkForEmptySpaceOnBoard()) {
-                System.out.println("Game over, there is no empty space on board!");
-            }
-            board[0][2] = userStep;
-            if (checkForWinner()) {
-                System.out.println("we have a winner!!!");
-            }
-            buttons[2].setText(convertBoardCellValue(0, 2));
-            userMoveStatus();
-        } else if (event.getSource() == buttons[3]) {
-            if (!checkForEmptySpaceOnBoard()) {
-                System.out.println("Game over, there is no empty space on board!");
-            }
-            board[1][0] = userStep;
-            if (checkForWinner()) {
-                System.out.println("we have a winner!!!");
-            }
-            buttons[3].setText(convertBoardCellValue(1, 0));
-            userMoveStatus();
-        } else if (event.getSource() == buttons[4]) {
-            if (!checkForEmptySpaceOnBoard()) {
-                System.out.println("Game over, there is no empty space on board!");
-            }
-            board[1][1] = userStep;
-            if (checkForWinner()) {
-                System.out.println("we have a winner!!!");
-            }
-            buttons[4].setText(convertBoardCellValue(1, 1));
-            userMoveStatus();
-        } else if (event.getSource() == buttons[5]) {
-            if (!checkForEmptySpaceOnBoard()) {
-                System.out.println("Game over, there is no empty space on board!");
-            }
-            board[1][2] = userStep;
-            if (checkForWinner()) {
-                System.out.println("we have a winner!!!");
-            }
-            buttons[5].setText(convertBoardCellValue(1, 2));
-            userMoveStatus();
-        } else if (event.getSource() == buttons[6]) {
-            if (!checkForEmptySpaceOnBoard()) {
-                System.out.println("Game over, there is no empty space on board!");
-            }
-            board[2][0] = userStep;
-            if (checkForWinner()) {
-                System.out.println("we have a winner!!!");
-            }
-            buttons[6].setText(convertBoardCellValue(2, 0));
-            userMoveStatus();
-        } else if (event.getSource() == buttons[7]) {
-            if (!checkForEmptySpaceOnBoard()) {
-                System.out.println("Game over, there is no empty space on board!");
-            }
-            board[2][1] = userStep;
-            if (checkForWinner()) {
-                System.out.println("we have a winner!!!");
-            }
-            buttons[7].setText(convertBoardCellValue(2, 1));
-            userMoveStatus();
-        } else if (event.getSource() == buttons[8]) {
-            if (!checkForEmptySpaceOnBoard()) {
-                System.out.println("Game over, there is no empty space on board!");
-            }
-            board[2][2] = userStep;
-            if (checkForWinner()) {
-                System.out.println("we have a winner!!!");
-            }
-            buttons[8].setText(convertBoardCellValue(2, 2));
-            userMoveStatus();
         }
     }
 }

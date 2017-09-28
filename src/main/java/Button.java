@@ -1,9 +1,9 @@
 import javax.swing.*;
 
-class Buttons extends JButton {
+class Button extends JButton {
     private int num = 0;
 
-    Buttons(int num){
+    Button(int num){
         this.num = num;
     }
 }
