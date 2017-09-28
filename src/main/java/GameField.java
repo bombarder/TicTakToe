@@ -19,6 +19,7 @@ class GameField implements ActionListener {
         panel.setLayout(gridLayout);
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new Button(i);
+            buttons[i].setFont(new Font("Arial", Font.PLAIN,40));
             buttons[i].addActionListener(this);
             panel.add(buttons[i]);
         }
