@@ -62,34 +62,33 @@ class GameField implements ActionListener {
         }
     }
 
-    private Button generateMove() {
+    private void generateMove() {
         int randomX = (int) (Math.random() * 3);
         int randomO = (int) (Math.random() * 3);
         if (board[randomX][randomO] == 0) {
             board[randomX][randomO] = userStep;
             if (randomX == 0 && randomO == 0) {
-                return buttons[0];
+                repaintBoard(buttons[0]);
             } else if (randomX == 0 & randomO == 1) {
-                return buttons[1];
+                repaintBoard(buttons[1]);
             } else if (randomX == 0 & randomO == 2) {
-                return buttons[2];
+                repaintBoard(buttons[2]);
             } else if (randomX == 1 & randomO == 0) {
-                return buttons[3];
+                repaintBoard(buttons[3]);
             } else if (randomX == 1 & randomO == 1) {
-                return buttons[4];
+                repaintBoard(buttons[4]);
             } else if (randomX == 1 & randomO == 2) {
-                return buttons[5];
+                repaintBoard(buttons[5]);
             } else if (randomX == 2 & randomO == 0) {
-                return buttons[6];
+                repaintBoard(buttons[6]);
             } else if (randomX == 2 & randomO == 1) {
-                return buttons[7];
+                repaintBoard(buttons[7]);
             } else if (randomX == 2 & randomO == 2) {
-                return buttons[8];
+                repaintBoard(buttons[8]);
             }
         } else {
             generateMove();
         }
-        return null;
     }
 
     private boolean checkForEmptySpaceOnBoard() {
@@ -112,8 +111,7 @@ class GameField implements ActionListener {
             }
         }
         changeUserTurn();
-        Button generatedMoveButton = generateMove();
-        repaintBoard(generatedMoveButton);
+        generateMove();
         beforeNextMoveChecking();
         changeUserTurn();
     }
