@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.TimeUnit;
 
 class GameField implements ActionListener {
 
@@ -10,9 +9,10 @@ class GameField implements ActionListener {
     private static int[][] board = new int[3][3];
     private static Button[] buttons = new Button[9];
     private boolean flag;
+    private static JFrame frame;
 
     GameField() {
-        JFrame frame = new JFrame("Tic Tac Toe");
+        frame = new JFrame("Tic Tac Toe");
         frame.setSize(400, 400);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -28,6 +28,7 @@ class GameField implements ActionListener {
             gamePanel.add(buttons[i]);
         }
         frame.add(gamePanel);
+        frame.setLocation(800,300);
         frame.setVisible(true);
     }
 
@@ -52,7 +53,7 @@ class GameField implements ActionListener {
         return false;
     }
 
-    private void changeUserTurn() {
+    void changeUserTurn() {
         if (flag) {
             userStep = 1;
             flag = false;
@@ -62,7 +63,7 @@ class GameField implements ActionListener {
         }
     }
 
-    private void generateMove() {
+    void generateMove() {
         int randomX = (int) (Math.random() * 3);
         int randomO = (int) (Math.random() * 3);
         if (board[randomX][randomO] == 0) {
@@ -108,12 +109,9 @@ class GameField implements ActionListener {
                 setUserMove(button);
                 repaintBoard(button);
                 beforeNextMoveChecking();
+                changeUserTurn();
             }
         }
-        changeUserTurn();
-        generateMove();
-        beforeNextMoveChecking();
-        changeUserTurn();
     }
 
     private void beforeNextMoveChecking() {
@@ -128,8 +126,9 @@ class GameField implements ActionListener {
     }
 
     private static void infoBox(String infoMessage) {
-        JOptionPane.showMessageDialog(null, infoMessage,
-                "InfoBox: Attention:", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(frame, infoMessage,
+                "Attention:", JOptionPane.INFORMATION_MESSAGE);
+
     }
 
     private void setUserMove(Button button) {
