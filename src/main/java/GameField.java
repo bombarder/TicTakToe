@@ -27,7 +27,6 @@ class GameField implements ActionListener {
             buttons[i].addActionListener(this);
             gamePanel.add(buttons[i]);
         }
-
         frame.add(gamePanel);
         frame.setVisible(true);
     }
@@ -68,27 +67,27 @@ class GameField implements ActionListener {
         int randomO = (int) (Math.random() * 3);
         if (board[randomX][randomO] == 0) {
             board[randomX][randomO] = userStep;
+            if (randomX == 0 && randomO == 0) {
+                return buttons[0];
+            } else if (randomX == 0 & randomO == 1) {
+                return buttons[1];
+            } else if (randomX == 0 & randomO == 2) {
+                return buttons[2];
+            } else if (randomX == 1 & randomO == 0) {
+                return buttons[3];
+            } else if (randomX == 1 & randomO == 1) {
+                return buttons[4];
+            } else if (randomX == 1 & randomO == 2) {
+                return buttons[5];
+            } else if (randomX == 2 & randomO == 0) {
+                return buttons[6];
+            } else if (randomX == 2 & randomO == 1) {
+                return buttons[7];
+            } else if (randomX == 2 & randomO == 2) {
+                return buttons[8];
+            }
         } else {
             generateMove();
-        }
-        if (randomX == 0 && randomO == 0) {
-            return buttons[0];
-        } else if (randomX == 0 && randomO == 1) {
-            return buttons[1];
-        } else if (randomX == 0 && randomO == 2) {
-            return buttons[2];
-        } else if (randomX == 1 && randomO == 0) {
-            return buttons[3];
-        } else if (randomX == 1 && randomO == 1) {
-            return buttons[4];
-        } else if (randomX == 1 && randomO == 2) {
-            return buttons[5];
-        } else if (randomX == 2 && randomO == 0) {
-            return buttons[6];
-        } else if (randomX == 2 && randomO == 1) {
-            return buttons[7];
-        } else if (randomX == 2 && randomO == 2) {
-            return buttons[8];
         }
         return null;
     }
@@ -107,28 +106,27 @@ class GameField implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         for (Button button : buttons) {
             if (event.getSource() == button) {
+                setUserMove(button);
                 repaintBoard(button);
-                if (!checkForEmptySpaceOnBoard()) {
-                    infoBox("Game over, there is no empty space on board!"
-                    );
-                }
-                if (checkForWinner()) {
-                    infoBox("we have a winner!!!"
-                    );
-                }
+                beforeNextMoveChecking();
             }
         }
         changeUserTurn();
-        repaintBoard(generateMove());
-        if (!checkForEmptySpaceOnBoard()) {
-            infoBox("Game over, there is no empty space on board!"
-            );
-        }
+        Button generatedMoveButton = generateMove();
+        repaintBoard(generatedMoveButton);
+        beforeNextMoveChecking();
+        changeUserTurn();
+    }
+
+    private void beforeNextMoveChecking() {
         if (checkForWinner()) {
             infoBox("we have a winner!!!"
             );
         }
-        changeUserTurn();
+        if (!checkForEmptySpaceOnBoard()) {
+            infoBox("Game over, there is no empty space on board!"
+            );
+        }
     }
 
     private static void infoBox(String infoMessage) {
@@ -136,70 +134,33 @@ class GameField implements ActionListener {
                 "InfoBox: Attention:", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void repaintBoard(Button button) {
+    private void setUserMove(Button button) {
         if (button.num == 1) {
             board[0][0] = userStep;
-            if (userStep == 1) {
-                button.setText("X");
-            } else {
-                button.setText("0");
-            }
         } else if (button.num == 2) {
             board[0][1] = userStep;
-            if (userStep == 1) {
-                button.setText("X");
-            } else {
-                button.setText("0");
-            }
         } else if (button.num == 3) {
             board[0][2] = userStep;
-            if (userStep == 1) {
-                button.setText("X");
-            } else {
-                button.setText("0");
-            }
         } else if (button.num == 4) {
             board[1][0] = userStep;
-            if (userStep == 1) {
-                button.setText("X");
-            } else {
-                button.setText("0");
-            }
         } else if (button.num == 5) {
             board[1][1] = userStep;
-            if (userStep == 1) {
-                button.setText("X");
-            } else {
-                button.setText("0");
-            }
         } else if (button.num == 6) {
             board[1][2] = userStep;
-            if (userStep == 1) {
-                button.setText("X");
-            } else {
-                button.setText("0");
-            }
         } else if (button.num == 7) {
             board[2][0] = userStep;
-            if (userStep == 1) {
-                button.setText("X");
-            } else {
-                button.setText("0");
-            }
         } else if (button.num == 8) {
             board[2][1] = userStep;
-            if (userStep == 1) {
-                button.setText("X");
-            } else {
-                button.setText("0");
-            }
         } else if (button.num == 9) {
             board[2][2] = userStep;
-            if (userStep == 1) {
-                button.setText("X");
-            } else {
-                button.setText("0");
-            }
+        }
+    }
+
+    private void repaintBoard(Button button) {
+        if (userStep == 1) {
+            button.setText("X");
+        } else {
+            button.setText("0");
         }
     }
 }
