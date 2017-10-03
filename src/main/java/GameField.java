@@ -2,6 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.TimeUnit;
+
+import static javax.swing.JOptionPane.CANCEL_OPTION;
+import static javax.swing.JOptionPane.NO_OPTION;
+import static javax.swing.JOptionPane.YES_OPTION;
 
 class GameField implements ActionListener {
 
@@ -20,7 +25,6 @@ class GameField implements ActionListener {
         JPanel gamePanel = new JPanel();
         GridLayout gridLayout = new GridLayout(3, 3);
         gamePanel.setLayout(gridLayout);
-
 
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new Button(i);
@@ -122,18 +126,33 @@ class GameField implements ActionListener {
 
     private void beforeNextMoveChecking() {
         if (checkForWinner()) {
-            infoBox("we have a winner!!!"
-            );
+            playAgain("we have a winner!!!");
         }
         if (!checkForEmptySpaceOnBoard()) {
-            infoBox("Game over, there is no empty space on board!"
-            );
+            playAgain("Game over, there is no empty space on board!");
         }
     }
 
-    private static void infoBox(String infoMessage) {
-        JOptionPane.showMessageDialog(frame, infoMessage,
-                "Attention:", JOptionPane.INFORMATION_MESSAGE);
+    private void playAgain(String message) {
+        int test = JOptionPane.showConfirmDialog(frame, message + "Play again?");
+        switch (test) {
+            case YES_OPTION:
+                for (int i = 0; i < board.length; i++){
+                    for (int j = 0; j < board[i].length; j++){
+                        board[i][j] = 0;
+                    }
+                }
+                for (Button button : buttons) {
+                    button.setText("");
+                }
+                board = new int[3][3];
+
+                break;
+            case NO_OPTION:
+                System.exit(0);
+            case CANCEL_OPTION:
+                System.exit(0);
+        }
     }
 
     private void setUserMove(Button button) {
@@ -170,7 +189,13 @@ class GameField implements ActionListener {
         public void run() {
             while (true) {
                 if (!isBotTurn) {
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     generateMove();
+                    beforeNextMoveChecking();
                     changeUserTurn();
                     isBotTurn = true;
                 }
