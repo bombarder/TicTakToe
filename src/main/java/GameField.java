@@ -1,7 +1,11 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import static javax.swing.JOptionPane.CANCEL_OPTION;
@@ -137,8 +141,8 @@ class GameField implements ActionListener {
         int test = JOptionPane.showConfirmDialog(frame, message + "Play again?");
         switch (test) {
             case YES_OPTION:
-                for (int i = 0; i < board.length; i++){
-                    for (int j = 0; j < board[i].length; j++){
+                for (int i = 0; i < board.length; i++) {
+                    for (int j = 0; j < board[i].length; j++) {
                         board[i][j] = 0;
                     }
                 }
@@ -178,10 +182,25 @@ class GameField implements ActionListener {
     }
 
     private void repaintBoard(Button button) {
+        BufferedImage img;
         if (userStep == 1) {
-            button.setText("X");
+            try {
+                img = ImageIO.read(new File("/resources/mouse.bmp"));
+//                img = ImageIO.read(getClass().getResource("/resources/mouse.bmp"));
+//                img = ImageIO.read(getClass().getResourceAsStream("/resources/mouse.bmp"));
+                button.setIcon(new ImageIcon(img));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
-            button.setText("0");
+            try {
+//                img = ImageIO.read(new File("/resources/panda.png"));
+//                img = ImageIO.read(getClass().getResource("/resources/panda.png"));
+                img = ImageIO.read(getClass().getResourceAsStream("/resources/panda.png"));
+                button.setIcon(new ImageIcon(img));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
