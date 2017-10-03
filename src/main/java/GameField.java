@@ -10,6 +10,7 @@ class GameField implements ActionListener {
     private static Button[] buttons = new Button[9];
     private boolean flag;
     private static JFrame frame;
+    private volatile boolean isBotTurn = true;
 
     GameField() {
         frame = new JFrame("Tic Tac Toe");
@@ -20,6 +21,7 @@ class GameField implements ActionListener {
         GridLayout gridLayout = new GridLayout(3, 3);
         gamePanel.setLayout(gridLayout);
 
+
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new Button(i);
             buttons[i].num = i + 1;
@@ -28,8 +30,11 @@ class GameField implements ActionListener {
             gamePanel.add(buttons[i]);
         }
         frame.add(gamePanel);
-        frame.setLocation(800,300);
+        frame.setLocation(800, 300);
         frame.setVisible(true);
+
+        BotThread botThread = new BotThread();
+        new Thread(botThread).start();
     }
 
     private boolean checkForWinner() {
@@ -53,7 +58,7 @@ class GameField implements ActionListener {
         return false;
     }
 
-    void changeUserTurn() {
+    private void changeUserTurn() {
         if (flag) {
             userStep = 1;
             flag = false;
@@ -63,7 +68,7 @@ class GameField implements ActionListener {
         }
     }
 
-    void generateMove() {
+    private void generateMove() {
         int randomX = (int) (Math.random() * 3);
         int randomO = (int) (Math.random() * 3);
         if (board[randomX][randomO] == 0) {
@@ -112,6 +117,7 @@ class GameField implements ActionListener {
                 changeUserTurn();
             }
         }
+        isBotTurn = false;
     }
 
     private void beforeNextMoveChecking() {
@@ -128,7 +134,6 @@ class GameField implements ActionListener {
     private static void infoBox(String infoMessage) {
         JOptionPane.showMessageDialog(frame, infoMessage,
                 "Attention:", JOptionPane.INFORMATION_MESSAGE);
-
     }
 
     private void setUserMove(Button button) {
@@ -158,6 +163,18 @@ class GameField implements ActionListener {
             button.setText("X");
         } else {
             button.setText("0");
+        }
+    }
+
+    private class BotThread implements Runnable {
+        public void run() {
+            while (true) {
+                if (!isBotTurn) {
+                    generateMove();
+                    changeUserTurn();
+                    isBotTurn = true;
+                }
+            }
         }
     }
 }
