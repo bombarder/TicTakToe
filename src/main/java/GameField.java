@@ -1,11 +1,15 @@
 import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
 import javax.swing.*;
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import static javax.swing.JOptionPane.CANCEL_OPTION;
@@ -185,16 +189,32 @@ class GameField implements ActionListener {
         BufferedImage img;
         if (userStep == 1) {
             try {
-                img = ImageIO.read(new File("src/imageFolder/x.png"));
+                img = ImageIO.read(new File("src/sourceFolder/X.png"));
                 button.setIcon(new ImageIcon(img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH)));
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/sourceFolder/xsound.wav").getAbsoluteFile());
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+                clip.start();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (LineUnavailableException e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                img = ImageIO.read(new File("src/imageFolder/o.png"));
+                img = ImageIO.read(new File("src/sourceFolder/0.png"));
                 button.setIcon(new ImageIcon(img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH)));
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/sourceFolder/osound.wav").getAbsoluteFile());
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+                clip.start();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (LineUnavailableException e) {
                 e.printStackTrace();
             }
         }
