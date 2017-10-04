@@ -185,19 +185,15 @@ class GameField implements ActionListener {
         BufferedImage img;
         if (userStep == 1) {
             try {
-                img = ImageIO.read(new File("/resources/mouse.bmp"));
-//                img = ImageIO.read(getClass().getResource("/resources/mouse.bmp"));
-//                img = ImageIO.read(getClass().getResourceAsStream("/resources/mouse.bmp"));
-                button.setIcon(new ImageIcon(img));
+                img = ImageIO.read(new File("src/imageFolder/x.png"));
+                button.setIcon(new ImageIcon(img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             try {
-//                img = ImageIO.read(new File("/resources/panda.png"));
-//                img = ImageIO.read(getClass().getResource("/resources/panda.png"));
-                img = ImageIO.read(getClass().getResourceAsStream("/resources/panda.png"));
-                button.setIcon(new ImageIcon(img));
+                img = ImageIO.read(new File("src/imageFolder/o.png"));
+                button.setIcon(new ImageIcon(img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
