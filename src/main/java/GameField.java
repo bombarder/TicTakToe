@@ -145,16 +145,11 @@ class GameField implements ActionListener {
         int test = JOptionPane.showConfirmDialog(frame, message + "Play again?");
         switch (test) {
             case YES_OPTION:
-                for (int i = 0; i < board.length; i++) {
-                    for (int j = 0; j < board[i].length; j++) {
-                        board[i][j] = 0;
-                    }
-                }
-                for (Button button : buttons) {
-                    button.setText("");
-                }
                 board = new int[3][3];
-
+                userStep = 0;
+                for (Button button : buttons) {
+                    repaintBoard(button);
+                }
                 break;
             case NO_OPTION:
                 System.exit(0);
@@ -202,7 +197,7 @@ class GameField implements ActionListener {
             } catch (LineUnavailableException e) {
                 e.printStackTrace();
             }
-        } else {
+        } else if (userStep == 2){
             try {
                 img = ImageIO.read(new File("src/sourceFolder/0.png"));
                 button.setIcon(new ImageIcon(img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH)));
@@ -215,6 +210,13 @@ class GameField implements ActionListener {
             } catch (UnsupportedAudioFileException e) {
                 e.printStackTrace();
             } catch (LineUnavailableException e) {
+                e.printStackTrace();
+            }
+        } else if ((userStep == 0)){
+            try {
+                img = ImageIO.read(new File("src/sourceFolder/empty.png"));
+                button.setIcon(new ImageIcon(img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH)));
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
