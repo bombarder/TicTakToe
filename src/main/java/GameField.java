@@ -1,15 +1,13 @@
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import javax.swing.*;
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import static javax.swing.JOptionPane.CANCEL_OPTION;
@@ -22,8 +20,18 @@ class GameField implements ActionListener {
     private static int[][] board = new int[3][3];
     private static Button[] buttons = new Button[9];
     private boolean flag;
+    private boolean moveUserState;
     private static JFrame frame;
     private volatile boolean isBotTurn = true;
+    private final static int[][] winLines = {{1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9},
+            {1, 4, 7},
+            {2, 5, 8},
+            {3, 6, 9},
+            {1, 5, 9},
+            {3, 5, 7}
+    };
 
     GameField() {
         frame = new JFrame("Tic Tac Toe");
@@ -50,6 +58,7 @@ class GameField implements ActionListener {
     }
 
     private boolean checkForWinner() {
+
         if (board[0][0] != 0 & (board[0][0] == board[0][1] & board[0][0] == board[0][2])) {
             return true;
         } else if (board[1][0] != 0 & (board[1][0] == board[1][1] & board[1][0] == board[1][2])) {
@@ -106,6 +115,71 @@ class GameField implements ActionListener {
             }
         } else {
             generateMove();
+        }
+    }
+
+    private void generateSmartMove() {
+        moveUserState = false;
+        for (int i = 0; i < winLines.length && !moveUserState; i++) {
+            checkLineForEqualsTwoElements(winLines[i]);
+        }
+        if (!moveUserState) {
+            System.out.println("Random");
+            generateMove();
+        }
+    }
+
+    private void checkLineForEqualsTwoElements(int[] winLine) {
+        int[] currentStateBoard = new int[3];
+        for (int i = 0; i < winLine.length; i++) {
+            currentStateBoard[i] = getCellResult(winLine[i]);
+        }
+        int counter = 0;
+        for (int i = 0; i < currentStateBoard.length; i++) {
+            if (currentStateBoard[i] == 1) {
+                counter++;
+            }
+        }
+        System.out.println("W => " + Arrays.toString(currentStateBoard) + " X => " + counter);
+        if (counter == 2) {
+            for (int j = 0; j < currentStateBoard.length; j++) {
+                if (currentStateBoard[j] == 0) {
+                    setCellResult(winLine[j]);
+                    repaintBoard(winLine[j]);
+                    moveUserState = true;
+                }
+            }
+        }
+    }
+
+    private void repaintBoard(int celLocation) {
+        if (celLocation == 1) {
+            board[0][0] = userStep;
+            repaintBoard(buttons[0]);
+        } else if (celLocation == 2) {
+            board[0][1] = userStep;
+            repaintBoard(buttons[1]);
+        } else if (celLocation == 3) {
+            board[0][2] = userStep;
+            repaintBoard(buttons[2]);
+        } else if (celLocation == 4) {
+            board[1][0] = userStep;
+            repaintBoard(buttons[3]);
+        } else if (celLocation == 5) {
+            board[1][1] = userStep;
+            repaintBoard(buttons[4]);
+        } else if (celLocation == 6) {
+            board[1][2] = userStep;
+            repaintBoard(buttons[5]);
+        } else if (celLocation == 7) {
+            board[2][0] = userStep;
+            repaintBoard(buttons[6]);
+        } else if (celLocation == 8) {
+            board[2][1] = userStep;
+            repaintBoard(buttons[7]);
+        } else if (celLocation == 9) {
+            board[2][2] = userStep;
+            repaintBoard(buttons[8]);
         }
     }
 
@@ -197,7 +271,7 @@ class GameField implements ActionListener {
             } catch (LineUnavailableException e) {
                 e.printStackTrace();
             }
-        } else if (userStep == 2){
+        } else if (userStep == 2) {
             try {
                 img = ImageIO.read(new File("src/sourceFolder/0.png"));
                 button.setIcon(new ImageIcon(img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH)));
@@ -212,7 +286,7 @@ class GameField implements ActionListener {
             } catch (LineUnavailableException e) {
                 e.printStackTrace();
             }
-        } else if ((userStep == 0)){
+        } else if ((userStep == 0)) {
             try {
                 img = ImageIO.read(new File("src/sourceFolder/empty.png"));
                 button.setIcon(new ImageIcon(img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH)));
@@ -231,12 +305,58 @@ class GameField implements ActionListener {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    generateMove();
+                    generateSmartMove();
                     beforeNextMoveChecking();
                     changeUserTurn();
                     isBotTurn = true;
                 }
             }
+        }
+    }
+
+    private int getCellResult(int value) {
+        if (value == 1) {
+            return board[0][0];
+        } else if (value == 2) {
+            return board[0][1];
+        } else if (value == 3) {
+            return board[0][2];
+        } else if (value == 4) {
+            return board[1][0];
+        } else if (value == 5) {
+            return board[1][1];
+        } else if (value == 6) {
+            return board[1][2];
+        } else if (value == 7) {
+            return board[2][0];
+        } else if (value == 8) {
+            return board[2][1];
+        } else if (value == 9) {
+            return board[2][2];
+        } else {
+            return 0;
+        }
+    }
+
+    private void setCellResult(int value) {
+        if (value == 1) {
+            board[0][0] = userStep;
+        } else if (value == 2) {
+            board[0][1] = userStep;
+        } else if (value == 3) {
+            board[0][2] = userStep;
+        } else if (value == 4) {
+            board[1][0] = userStep;
+        } else if (value == 5) {
+            board[1][1] = userStep;
+        } else if (value == 6) {
+            board[1][2] = userStep;
+        } else if (value == 7) {
+            board[2][0] = userStep;
+        } else if (value == 8) {
+            board[2][1] = userStep;
+        } else if (value == 9) {
+            board[2][2] = userStep;
         }
     }
 }
