@@ -1,5 +1,4 @@
 import javax.imageio.ImageIO;
-import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -13,12 +12,10 @@ import static javax.swing.JOptionPane.CANCEL_OPTION;
 import static javax.swing.JOptionPane.NO_OPTION;
 import static javax.swing.JOptionPane.YES_OPTION;
 
-class GameField implements ActionListener {
+class GameField {
 
     private int userStep = 1;
     private static int[][] board = new int[3][3];
-    //    private static Button[] buttons = new Button[9];
-    private static int[] cellBoard = new int[9];
     private boolean flag;
     private boolean moveUserState;
     private static JFrame frame;
@@ -54,11 +51,11 @@ class GameField implements ActionListener {
                 super.paintComponent(g);
                 g.drawImage(field, 0, 0, null);
                 for (int i = 0; i < board.length; i++) {
-                    for (int j = 0; j <board[i].length ; j++) {
-                        if (board[i][j] == 1){
-                            g.drawImage(imageOfX, 100*i,100*j,null);
-                        } else if (board[i][j] == 2){
-                            g.drawImage(imageOfO, 100*i,100*j,null);
+                    for (int j = 0; j < board[i].length; j++) {
+                        if (board[i][j] == 1) {
+                            g.drawImage(imageOfX, 100 * i + 3, 100 * j + 3, null);
+                        } else if (board[i][j] == 2) {
+                            g.drawImage(imageOfO, 100 * i + 3, 100 * j + 3, null);
                         }
                     }
                 }
@@ -66,9 +63,6 @@ class GameField implements ActionListener {
         };
         gamePanel.setBackground(Color.WHITE);
         gamePanel.setBounds(0, 0, 300, 300);
-
-//        drawPanel(gamePanel);
-
         gamePanel.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {
                 int x = e.getX();
@@ -120,10 +114,6 @@ class GameField implements ActionListener {
 
         BotThread botThread = new BotThread();
         new Thread(botThread).start();
-    }
-
-    private void drawPanel(JPanel gamePanel) {
-        gamePanel.repaint();
     }
 
     private boolean checkForWinner() {
@@ -185,8 +175,8 @@ class GameField implements ActionListener {
             currentStateBoard[i] = getCellResult(winLine[i]);
         }
         int counter = 0;
-        for (int i = 0; i < currentStateBoard.length; i++) {
-            if (currentStateBoard[i] == 1) {
+        for (int aCurrentStateBoard : currentStateBoard) {
+            if (aCurrentStateBoard == 1) {
                 counter++;
             }
         }
@@ -201,37 +191,6 @@ class GameField implements ActionListener {
         }
     }
 
-//    private void repaintBoard(int celLocation) {
-//        if (celLocation == 1) {
-//            board[0][0] = userStep;
-//            repaintBoard(buttons[0]);
-//        } else if (celLocation == 2) {
-//            board[0][1] = userStep;
-//            repaintBoard(buttons[1]);
-//        } else if (celLocation == 3) {
-//            board[0][2] = userStep;
-//            repaintBoard(buttons[2]);
-//        } else if (celLocation == 4) {
-//            board[1][0] = userStep;
-//            repaintBoard(buttons[3]);
-//        } else if (celLocation == 5) {
-//            board[1][1] = userStep;
-//            repaintBoard(buttons[4]);
-//        } else if (celLocation == 6) {
-//            board[1][2] = userStep;
-//            repaintBoard(buttons[5]);
-//        } else if (celLocation == 7) {
-//            board[2][0] = userStep;
-//            repaintBoard(buttons[6]);
-//        } else if (celLocation == 8) {
-//            board[2][1] = userStep;
-//            repaintBoard(buttons[7]);
-//        } else if (celLocation == 9) {
-//            board[2][2] = userStep;
-//            repaintBoard(buttons[8]);
-//        }
-//    }
-
     private boolean checkForEmptySpaceOnBoard() {
         for (int[] aBoard : board) {
             for (int anABoard : aBoard) {
@@ -241,18 +200,6 @@ class GameField implements ActionListener {
             }
         }
         return false;
-    }
-
-    public void actionPerformed(ActionEvent event) {
-//        for (Button button : buttons) {
-//            if (event.getSource() == button) {
-////                setUserMove(button);
-////                repaintBoard(button);
-//                beforeNextMoveChecking();
-//                changeUserTurn();
-//            }
-//        }
-        isBotTurn = false;
     }
 
     private void beforeNextMoveChecking() {
@@ -278,49 +225,6 @@ class GameField implements ActionListener {
         }
     }
 
-
-    private void repaintBoard(Button button) {
-        BufferedImage img;
-        if (userStep == 1) {
-            try {
-                img = ImageIO.read(new File("src/sourceFolder/X.png"));
-                button.setIcon(new ImageIcon(img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH)));
-                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/sourceFolder/xsound.wav").getAbsoluteFile());
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInputStream);
-                clip.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (UnsupportedAudioFileException e) {
-                e.printStackTrace();
-            } catch (LineUnavailableException e) {
-                e.printStackTrace();
-            }
-        } else if (userStep == 2) {
-            try {
-                img = ImageIO.read(new File("src/sourceFolder/0.png"));
-                button.setIcon(new ImageIcon(img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH)));
-                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/sourceFolder/osound.wav").getAbsoluteFile());
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInputStream);
-                clip.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (UnsupportedAudioFileException e) {
-                e.printStackTrace();
-            } catch (LineUnavailableException e) {
-                e.printStackTrace();
-            }
-        } else if ((userStep == 0)) {
-            try {
-                img = ImageIO.read(new File("src/sourceFolder/empty.png"));
-                button.setIcon(new ImageIcon(img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH)));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     private class BotThread implements Runnable {
         public void run() {
             while (true) {
@@ -329,6 +233,9 @@ class GameField implements ActionListener {
                         TimeUnit.SECONDS.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                    }
+                    if (!checkForEmptySpaceOnBoard()) {
+                        playAgain("Game over, there is no empty space on board!");
                     }
                     generateSmartMove();
                     beforeNextMoveChecking();
