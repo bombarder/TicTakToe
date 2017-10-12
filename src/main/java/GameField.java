@@ -45,7 +45,6 @@ class GameField {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
         final JPanel gamePanel = new JPanel() {
             public void paint(Graphics g) {
                 super.paintComponent(g);
@@ -88,6 +87,7 @@ class GameField {
                 }
                 gamePanel.repaint();
                 changeUserTurn();
+                beforeNextMoveChecking();
                 isBotTurn = false;
             }
 
@@ -109,7 +109,6 @@ class GameField {
         });
         frame.add(gamePanel);
         frame.setLocation(800, 300);
-        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
         BotThread botThread = new BotThread();
@@ -117,7 +116,6 @@ class GameField {
     }
 
     private boolean checkForWinner() {
-
         if (board[0][0] != 0 & (board[0][0] == board[0][1] & board[0][0] == board[0][2])) {
             return true;
         } else if (board[1][0] != 0 & (board[1][0] == board[1][1] & board[1][0] == board[1][2])) {
@@ -204,10 +202,10 @@ class GameField {
 
     private void beforeNextMoveChecking() {
         if (checkForWinner()) {
-            playAgain("we have pointerInfo winner!!!");
+            playAgain("we have a winner!!!");
         }
         if (!checkForEmptySpaceOnBoard()) {
-            playAgain("Game over, there is no empty space on board!");
+            playAgain("Game over, there is no empty space on board! ");
         }
     }
 
@@ -235,12 +233,12 @@ class GameField {
                         e.printStackTrace();
                     }
                     if (!checkForEmptySpaceOnBoard()) {
-                        playAgain("Game over, there is no empty space on board!");
+                        playAgain("Game over, there is no empty space on board! ");
                     }
                     generateSmartMove();
+                    frame.repaint();
                     beforeNextMoveChecking();
                     changeUserTurn();
-                    frame.repaint();
                     isBotTurn = true;
                 }
             }
