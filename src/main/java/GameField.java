@@ -23,6 +23,7 @@ class GameField {
     private BufferedImage field;
     private BufferedImage imageOfX;
     private BufferedImage imageOfO;
+    private final JPanel gamePanel;
 
     private final static int[][] winLines = {{1, 2, 3},
             {4, 5, 6},
@@ -45,7 +46,7 @@ class GameField {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        final JPanel gamePanel = new JPanel() {
+        gamePanel = new JPanel() {
             public void paint(Graphics g) {
                 super.paintComponent(g);
                 g.drawImage(field, 0, 0, null);
@@ -202,10 +203,14 @@ class GameField {
 
     private void beforeNextMoveChecking() {
         if (checkForWinner()) {
+            gamePanel.repaint();
             playAgain("we have a winner!!!");
+            board = new int[3][3];
         }
         if (!checkForEmptySpaceOnBoard()) {
+            gamePanel.repaint();
             playAgain("Game over, there is no empty space on board! ");
+            board = new int[3][3];
         }
     }
 
@@ -213,7 +218,6 @@ class GameField {
         int test = JOptionPane.showConfirmDialog(frame, message + "Play again?");
         switch (test) {
             case YES_OPTION:
-                board = new int[3][3];
                 userStep = 0;
                 break;
             case NO_OPTION:
@@ -232,12 +236,9 @@ class GameField {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if (!checkForEmptySpaceOnBoard()) {
-                        playAgain("Game over, there is no empty space on board! ");
-                    }
                     generateSmartMove();
-                    frame.repaint();
                     beforeNextMoveChecking();
+                    gamePanel.repaint();
                     changeUserTurn();
                     isBotTurn = true;
                 }
