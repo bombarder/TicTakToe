@@ -2,8 +2,7 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,11 +17,16 @@ class GameField implements ActionListener {
 
     private int userStep = 1;
     private static int[][] board = new int[3][3];
-    private static Button[] buttons = new Button[9];
+    //    private static Button[] buttons = new Button[9];
+    private static int[] cellBoard = new int[9];
     private boolean flag;
     private boolean moveUserState;
     private static JFrame frame;
     private volatile boolean isBotTurn = true;
+    private BufferedImage field;
+    private BufferedImage imageOfX;
+    private BufferedImage imageOfO;
+
     private final static int[][] winLines = {{1, 2, 3},
             {4, 5, 6},
             {7, 8, 9},
@@ -35,26 +39,91 @@ class GameField implements ActionListener {
 
     GameField() {
         frame = new JFrame("Tic Tac Toe");
-        frame.setSize(400, 400);
+        frame.setSize(319, 348);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        JPanel gamePanel = new JPanel();
-        GridLayout gridLayout = new GridLayout(3, 3);
-        gamePanel.setLayout(gridLayout);
-
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = new Button(i);
-            buttons[i].num = i + 1;
-            buttons[i].setFont(new Font("Arial", Font.PLAIN, 40));
-            buttons[i].addActionListener(this);
-            gamePanel.add(buttons[i]);
+        try {
+            field = ImageIO.read(new File("src/sourceFolder/field.png"));
+            imageOfX = ImageIO.read(new File("src/sourceFolder/X.png"));
+            imageOfO = ImageIO.read(new File("src/sourceFolder/O.png"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
+
+        final JPanel gamePanel = new JPanel() {
+            public void paint(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(field, 0, 0, null);
+                for (int i = 0; i < board.length; i++) {
+                    for (int j = 0; j <board[i].length ; j++) {
+                        if (board[i][j] == 1){
+                            g.drawImage(imageOfX, 100*i,100*j,null);
+                        } else if (board[i][j] == 2){
+                            g.drawImage(imageOfO, 100*i,100*j,null);
+                        }
+                    }
+                }
+            }
+        };
+        gamePanel.setBackground(Color.WHITE);
+        gamePanel.setBounds(0, 0, 300, 300);
+
+//        drawPanel(gamePanel);
+
+        gamePanel.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent e) {
+                int x = e.getX();
+                int y = e.getY();
+                if (x < 100 && y < 100) {
+                    setCellResult(1);
+                } else if (x < 100 && y < 200) {
+                    setCellResult(2);
+                } else if (x < 100 && y < 300) {
+                    setCellResult(3);
+                } else if (x < 200 && y < 100) {
+                    setCellResult(4);
+                } else if (x < 200 && y < 200) {
+                    setCellResult(5);
+                } else if (x < 200 && y < 300) {
+                    setCellResult(6);
+                } else if (x < 300 && y < 100) {
+                    setCellResult(7);
+                } else if (x < 300 && y < 200) {
+                    setCellResult(8);
+                } else if (x < 300 && y < 300) {
+                    setCellResult(9);
+                }
+                gamePanel.repaint();
+                changeUserTurn();
+                isBotTurn = false;
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
         frame.add(gamePanel);
         frame.setLocation(800, 300);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
         BotThread botThread = new BotThread();
         new Thread(botThread).start();
+    }
+
+    private void drawPanel(JPanel gamePanel) {
+        gamePanel.repaint();
     }
 
     private boolean checkForWinner() {
@@ -94,25 +163,6 @@ class GameField implements ActionListener {
         int randomO = (int) (Math.random() * 3);
         if (board[randomX][randomO] == 0) {
             board[randomX][randomO] = userStep;
-            if (randomX == 0 && randomO == 0) {
-                repaintBoard(buttons[0]);
-            } else if (randomX == 0 & randomO == 1) {
-                repaintBoard(buttons[1]);
-            } else if (randomX == 0 & randomO == 2) {
-                repaintBoard(buttons[2]);
-            } else if (randomX == 1 & randomO == 0) {
-                repaintBoard(buttons[3]);
-            } else if (randomX == 1 & randomO == 1) {
-                repaintBoard(buttons[4]);
-            } else if (randomX == 1 & randomO == 2) {
-                repaintBoard(buttons[5]);
-            } else if (randomX == 2 & randomO == 0) {
-                repaintBoard(buttons[6]);
-            } else if (randomX == 2 & randomO == 1) {
-                repaintBoard(buttons[7]);
-            } else if (randomX == 2 & randomO == 2) {
-                repaintBoard(buttons[8]);
-            }
         } else {
             generateMove();
         }
@@ -145,43 +195,42 @@ class GameField implements ActionListener {
             for (int j = 0; j < currentStateBoard.length; j++) {
                 if (currentStateBoard[j] == 0) {
                     setCellResult(winLine[j]);
-                    repaintBoard(winLine[j]);
                     moveUserState = true;
                 }
             }
         }
     }
 
-    private void repaintBoard(int celLocation) {
-        if (celLocation == 1) {
-            board[0][0] = userStep;
-            repaintBoard(buttons[0]);
-        } else if (celLocation == 2) {
-            board[0][1] = userStep;
-            repaintBoard(buttons[1]);
-        } else if (celLocation == 3) {
-            board[0][2] = userStep;
-            repaintBoard(buttons[2]);
-        } else if (celLocation == 4) {
-            board[1][0] = userStep;
-            repaintBoard(buttons[3]);
-        } else if (celLocation == 5) {
-            board[1][1] = userStep;
-            repaintBoard(buttons[4]);
-        } else if (celLocation == 6) {
-            board[1][2] = userStep;
-            repaintBoard(buttons[5]);
-        } else if (celLocation == 7) {
-            board[2][0] = userStep;
-            repaintBoard(buttons[6]);
-        } else if (celLocation == 8) {
-            board[2][1] = userStep;
-            repaintBoard(buttons[7]);
-        } else if (celLocation == 9) {
-            board[2][2] = userStep;
-            repaintBoard(buttons[8]);
-        }
-    }
+//    private void repaintBoard(int celLocation) {
+//        if (celLocation == 1) {
+//            board[0][0] = userStep;
+//            repaintBoard(buttons[0]);
+//        } else if (celLocation == 2) {
+//            board[0][1] = userStep;
+//            repaintBoard(buttons[1]);
+//        } else if (celLocation == 3) {
+//            board[0][2] = userStep;
+//            repaintBoard(buttons[2]);
+//        } else if (celLocation == 4) {
+//            board[1][0] = userStep;
+//            repaintBoard(buttons[3]);
+//        } else if (celLocation == 5) {
+//            board[1][1] = userStep;
+//            repaintBoard(buttons[4]);
+//        } else if (celLocation == 6) {
+//            board[1][2] = userStep;
+//            repaintBoard(buttons[5]);
+//        } else if (celLocation == 7) {
+//            board[2][0] = userStep;
+//            repaintBoard(buttons[6]);
+//        } else if (celLocation == 8) {
+//            board[2][1] = userStep;
+//            repaintBoard(buttons[7]);
+//        } else if (celLocation == 9) {
+//            board[2][2] = userStep;
+//            repaintBoard(buttons[8]);
+//        }
+//    }
 
     private boolean checkForEmptySpaceOnBoard() {
         for (int[] aBoard : board) {
@@ -195,20 +244,20 @@ class GameField implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent event) {
-        for (Button button : buttons) {
-            if (event.getSource() == button) {
-                setUserMove(button);
-                repaintBoard(button);
-                beforeNextMoveChecking();
-                changeUserTurn();
-            }
-        }
+//        for (Button button : buttons) {
+//            if (event.getSource() == button) {
+////                setUserMove(button);
+////                repaintBoard(button);
+//                beforeNextMoveChecking();
+//                changeUserTurn();
+//            }
+//        }
         isBotTurn = false;
     }
 
     private void beforeNextMoveChecking() {
         if (checkForWinner()) {
-            playAgain("we have a winner!!!");
+            playAgain("we have pointerInfo winner!!!");
         }
         if (!checkForEmptySpaceOnBoard()) {
             playAgain("Game over, there is no empty space on board!");
@@ -221,9 +270,6 @@ class GameField implements ActionListener {
             case YES_OPTION:
                 board = new int[3][3];
                 userStep = 0;
-                for (Button button : buttons) {
-                    repaintBoard(button);
-                }
                 break;
             case NO_OPTION:
                 System.exit(0);
@@ -232,27 +278,6 @@ class GameField implements ActionListener {
         }
     }
 
-    private void setUserMove(Button button) {
-        if (button.num == 1) {
-            board[0][0] = userStep;
-        } else if (button.num == 2) {
-            board[0][1] = userStep;
-        } else if (button.num == 3) {
-            board[0][2] = userStep;
-        } else if (button.num == 4) {
-            board[1][0] = userStep;
-        } else if (button.num == 5) {
-            board[1][1] = userStep;
-        } else if (button.num == 6) {
-            board[1][2] = userStep;
-        } else if (button.num == 7) {
-            board[2][0] = userStep;
-        } else if (button.num == 8) {
-            board[2][1] = userStep;
-        } else if (button.num == 9) {
-            board[2][2] = userStep;
-        }
-    }
 
     private void repaintBoard(Button button) {
         BufferedImage img;
@@ -308,6 +333,7 @@ class GameField implements ActionListener {
                     generateSmartMove();
                     beforeNextMoveChecking();
                     changeUserTurn();
+                    frame.repaint();
                     isBotTurn = true;
                 }
             }
