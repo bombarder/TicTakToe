@@ -6,6 +6,7 @@ class BotController {
     private GameField field;
     private boolean moveUserState;
     private final static Random random = new Random();
+
     private final static int[][] winLines = {{1, 2, 3},
             {4, 5, 6},
             {7, 8, 9},
@@ -18,6 +19,10 @@ class BotController {
 
     BotController(GameField field) {
         this.field = field;
+    }
+
+    static int[][] getWinLines() {
+        return winLines;
     }
 
     private void generateMove() {

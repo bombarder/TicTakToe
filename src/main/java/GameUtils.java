@@ -22,7 +22,7 @@ class GameUtils {
     }
 
     static void beforeNextMoveChecking(GameField field) {
-        if (checkForWinner()) {
+        if (checkForWinner(field)) {
             field.gamePanel.repaint();
             playAgain(field, "we have a winner!!!");
             field.setBoard(new int[3][3]);
@@ -36,10 +36,21 @@ class GameUtils {
         }
     }
 
-    static boolean checkForWinner() {
-        return false;
+    static boolean checkForWinner(GameField field) {
+        int[] currentStateBoard = new int[3];
+        for (int i = 0; i < BotController.getWinLines().length; i++) {
+            for (int j = 0; j < BotController.getWinLines()[i].length; j++) {
+                currentStateBoard[i] = field.getBoard()[i][j];
+            }
+        }
+        int counter = 0;
+        for (int aCurrentStateBoard : currentStateBoard) {
+            if (aCurrentStateBoard == 1) {
+                counter++;
+            }
+        }
+        return counter == 3;
     }
-
 
     static boolean checkForEmptySpaceOnBoard(GameField field) {
         for (int[] aBoard : field.getBoard()) {

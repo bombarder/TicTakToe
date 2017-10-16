@@ -26,6 +26,7 @@ class GameField {
     private BufferedImage imageOfX;
     private BufferedImage imageOfO;
     final JPanel gamePanel;
+
     GameField() {
         frame = new JFrame("Tic Tac Toe");
         frame.setSize(319, 348);
