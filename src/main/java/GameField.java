@@ -14,27 +14,18 @@ import static javax.swing.JOptionPane.YES_OPTION;
 
 class GameField {
 
-    private int userStep = 1;
-    private static int[][] board = new int[3][3];
+    private int[][] board = new int[3][3];
+
     private boolean flag;
-    private boolean moveUserState;
-    private static JFrame frame;
-    private volatile boolean isBotTurn = true;
+
+    int userStep = 1;
+    boolean isBotTurn = false;
+    static JFrame frame;
     private BufferedImage field;
+
     private BufferedImage imageOfX;
     private BufferedImage imageOfO;
-    private final JPanel gamePanel;
-
-    private final static int[][] winLines = {{1, 2, 3},
-            {4, 5, 6},
-            {7, 8, 9},
-            {1, 4, 7},
-            {2, 5, 8},
-            {3, 6, 9},
-            {1, 5, 9},
-            {3, 5, 7}
-    };
-
+    final JPanel gamePanel;
     GameField() {
         frame = new JFrame("Tic Tac Toe");
         frame.setSize(319, 348);
@@ -87,9 +78,7 @@ class GameField {
                     setCellResult(9);
                 }
                 gamePanel.repaint();
-                changeUserTurn();
-                beforeNextMoveChecking();
-                isBotTurn = false;
+                isBotTurn = true;
             }
 
             public void mousePressed(MouseEvent e) {
@@ -111,30 +100,14 @@ class GameField {
         frame.add(gamePanel);
         frame.setLocation(800, 300);
         frame.setVisible(true);
-
-        BotThread botThread = new BotThread();
-        new Thread(botThread).start();
     }
 
-    private boolean checkForWinner() {
-        if (board[0][0] != 0 & (board[0][0] == board[0][1] & board[0][0] == board[0][2])) {
-            return true;
-        } else if (board[1][0] != 0 & (board[1][0] == board[1][1] & board[1][0] == board[1][2])) {
-            return true;
-        } else if (board[2][0] != 0 & (board[2][0] == board[2][1] & board[2][0] == board[2][2])) {
-            return true;
-        } else if (board[0][0] != 0 & (board[0][0] == board[1][1] & board[0][0] == board[2][2])) {
-            return true;
-        } else if (board[2][0] != 0 & (board[2][0] == board[1][1] & board[2][0] == board[0][2])) {
-            return true;
-        } else if (board[0][0] != 0 & (board[0][0] == board[1][0] & board[0][0] == board[2][0])) {
-            return true;
-        } else if (board[0][1] != 0 & (board[0][1] == board[1][1] & board[0][1] == board[2][1])) {
-            return true;
-        } else if (board[0][2] != 0 & (board[0][2] == board[1][2] & board[0][2] == board[2][2])) {
-            return true;
-        }
-        return false;
+    void setBoard(int[][] board) {
+        this.board = board;
+    }
+
+    int[][] getBoard() {
+        return board;
     }
 
     private void changeUserTurn() {
@@ -147,106 +120,7 @@ class GameField {
         }
     }
 
-    private void generateMove() {
-        int randomX = (int) (Math.random() * 3);
-        int randomO = (int) (Math.random() * 3);
-        if (board[randomX][randomO] == 0) {
-            board[randomX][randomO] = userStep;
-        } else {
-            generateMove();
-        }
-    }
-
-    private void generateSmartMove() {
-        moveUserState = false;
-        for (int i = 0; i < winLines.length && !moveUserState; i++) {
-            checkLineForEqualsTwoElements(winLines[i]);
-        }
-        if (!moveUserState) {
-            System.out.println("Random");
-            generateMove();
-        }
-    }
-
-    private void checkLineForEqualsTwoElements(int[] winLine) {
-        int[] currentStateBoard = new int[3];
-        for (int i = 0; i < winLine.length; i++) {
-            currentStateBoard[i] = getCellResult(winLine[i]);
-        }
-        int counter = 0;
-        for (int aCurrentStateBoard : currentStateBoard) {
-            if (aCurrentStateBoard == 1) {
-                counter++;
-            }
-        }
-        System.out.println("W => " + Arrays.toString(currentStateBoard) + " X => " + counter);
-        if (counter == 2) {
-            for (int j = 0; j < currentStateBoard.length; j++) {
-                if (currentStateBoard[j] == 0) {
-                    setCellResult(winLine[j]);
-                    moveUserState = true;
-                }
-            }
-        }
-    }
-
-    private boolean checkForEmptySpaceOnBoard() {
-        for (int[] aBoard : board) {
-            for (int anABoard : aBoard) {
-                if (anABoard == 0) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private void beforeNextMoveChecking() {
-        if (checkForWinner()) {
-            gamePanel.repaint();
-            playAgain("we have a winner!!!");
-            board = new int[3][3];
-        }
-        if (!checkForEmptySpaceOnBoard()) {
-            gamePanel.repaint();
-            playAgain("Game over, there is no empty space on board! ");
-            board = new int[3][3];
-        }
-    }
-
-    private void playAgain(String message) {
-        int test = JOptionPane.showConfirmDialog(frame, message + "Play again?");
-        switch (test) {
-            case YES_OPTION:
-                userStep = 0;
-                break;
-            case NO_OPTION:
-                System.exit(0);
-            case CANCEL_OPTION:
-                System.exit(0);
-        }
-    }
-
-    private class BotThread implements Runnable {
-        public void run() {
-            while (true) {
-                if (!isBotTurn) {
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    generateSmartMove();
-                    beforeNextMoveChecking();
-                    gamePanel.repaint();
-                    changeUserTurn();
-                    isBotTurn = true;
-                }
-            }
-        }
-    }
-
-    private int getCellResult(int value) {
+    int getCellResult(int value) {
         if (value == 1) {
             return board[0][0];
         } else if (value == 2) {
@@ -270,25 +144,79 @@ class GameField {
         }
     }
 
-    private void setCellResult(int value) {
+    void setCellResult(int value) {
         if (value == 1) {
-            board[0][0] = userStep;
+            if (board[0][0] != 0) {
+                System.out.println("Cell is busy, choose another one!");
+            } else {
+                board[0][0] = userStep;
+                changeUserTurn();
+                isBotTurn = true;
+            }
         } else if (value == 2) {
-            board[0][1] = userStep;
+            if (board[0][1] != 0) {
+                System.out.println("Cell is busy, choose another one!");
+            } else {
+                board[0][1] = userStep;
+                changeUserTurn();
+                isBotTurn = true;
+            }
         } else if (value == 3) {
-            board[0][2] = userStep;
+            if (board[0][2] != 0) {
+                System.out.println("Cell is busy, choose another one!");
+            } else {
+                board[0][2] = userStep;
+                changeUserTurn();
+                isBotTurn = true;
+            }
         } else if (value == 4) {
-            board[1][0] = userStep;
+            if (board[1][0] != 0) {
+                System.out.println("Cell is busy, choose another one!");
+            } else {
+                board[1][0] = userStep;
+                changeUserTurn();
+                isBotTurn = true;
+            }
         } else if (value == 5) {
-            board[1][1] = userStep;
+            if (board[1][1] != 0) {
+                System.out.println("Cell is busy, choose another one!");
+            } else {
+                board[1][1] = userStep;
+                changeUserTurn();
+                isBotTurn = true;
+            }
         } else if (value == 6) {
-            board[1][2] = userStep;
+            if (board[1][2] != 0) {
+                System.out.println("Cell is busy, choose another one!");
+            } else {
+                board[1][2] = userStep;
+                changeUserTurn();
+                isBotTurn = true;
+            }
         } else if (value == 7) {
-            board[2][0] = userStep;
+            if (board[2][0] != 0) {
+                System.out.println("Cell is busy, choose another one!");
+            } else {
+                board[2][0] = userStep;
+                changeUserTurn();
+                isBotTurn = true;
+            }
         } else if (value == 8) {
-            board[2][1] = userStep;
+            if (board[2][1] != 0) {
+                System.out.println("Cell is busy, choose another one!");
+            } else {
+                board[2][1] = userStep;
+                changeUserTurn();
+                isBotTurn = true;
+            }
         } else if (value == 9) {
-            board[2][2] = userStep;
+            if (board[2][2] != 0) {
+                System.out.println("Cell is busy, choose another one!");
+            } else {
+                board[2][2] = userStep;
+                changeUserTurn();
+                isBotTurn = true;
+            }
         }
     }
 }
