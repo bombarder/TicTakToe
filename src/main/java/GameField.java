@@ -12,12 +12,10 @@ class GameField {
     private int[][] board = new int[3][3];
 
     private boolean flag;
-
-    int userStep = 1;
+    int userStep = BoardElement.ONE.getValue();
     boolean isBotTurn = false;
     static JFrame frame;
     private BufferedImage field;
-
     private BufferedImage imageOfX;
     private BufferedImage imageOfO;
     final JPanel gamePanel;
@@ -39,9 +37,9 @@ class GameField {
                 g.drawImage(field, 0, 0, null);
                 for (int i = 0; i < board.length; i++) {
                     for (int j = 0; j < board[i].length; j++) {
-                        if (board[i][j] == 1) {
+                        if (board[i][j] == BoardElement.ONE.getValue()) {
                             g.drawImage(imageOfX, 100 * i + 3, 100 * j + 3, null);
-                        } else if (board[i][j] == 2) {
+                        } else if (board[i][j] == BoardElement.TWO.getValue()) {
                             g.drawImage(imageOfO, 100 * i + 3, 100 * j + 3, null);
                         }
                     }
@@ -108,10 +106,10 @@ class GameField {
 
     private void changeUserTurn() {
         if (flag) {
-            userStep = 1;
+            userStep = BoardElement.ONE.getValue();
             flag = false;
         } else {
-            userStep = 2;
+            userStep = BoardElement.TWO.getValue();
             flag = true;
         }
     }

@@ -30,7 +30,7 @@ class BotController {
         int cell;
         do {
             cell = random.nextInt(9) + 1;
-        } while (field.getCellResult(cell) != 0);
+        } while (field.getCellResult(cell) != BoardElement.ZERO.getValue());
         field.setCellResult(cell);
     }
 
@@ -59,7 +59,7 @@ class BotController {
         System.out.println("W => " + Arrays.toString(currentStateBoard) + " X => " + counter);
         if (counter == 2) {
             for (int j = 0; j < currentStateBoard.length; j++) {
-                if (currentStateBoard[j] == 0) {
+                if (currentStateBoard[j] == BoardElement.ZERO.getValue()) {
                     field.setCellResult(winLine[j]);
                     moveUserState = true;
                 }

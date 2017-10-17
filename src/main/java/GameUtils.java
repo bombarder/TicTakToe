@@ -12,7 +12,7 @@ class GameUtils {
         int test = JOptionPane.showConfirmDialog(GameField.frame, message + "Play again?");
         switch (test) {
             case YES_OPTION:
-                field.userStep = 0;
+                field.userStep = BoardElement.ZERO.getValue();
                 break;
             case NO_OPTION:
                 System.exit(0);
@@ -59,7 +59,7 @@ class GameUtils {
     static boolean checkForEmptySpaceOnBoard(GameField field) {
         for (int[] aBoard : field.getBoard()) {
             for (int anABoard : aBoard) {
-                if (anABoard == 0) {
+                if (anABoard == BoardElement.ZERO.getValue()) {
                     return true;
                 }
             }
