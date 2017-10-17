@@ -27,12 +27,11 @@ class BotController {
     }
 
     private void generateMove() {
-        int cell = random.nextInt(9) + 1;
-        if (field.getCellResult(cell) == 0) {
-            field.setCellResult(cell);
-        } else {
-            generateMove();
-        }
+        int cell;
+        do {
+            cell = random.nextInt(9) + 1;
+        } while (field.getCellResult(cell) != 0);
+        field.setCellResult(cell);
     }
 
     void generateSmartMove() {
