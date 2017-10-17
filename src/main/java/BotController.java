@@ -7,7 +7,8 @@ class BotController {
     private boolean moveUserState;
     private final static Random random = new Random();
 
-    private final static int[][] winLines = {{1, 2, 3},
+    private final static int[][] winLines = {
+            {1, 2, 3},
             {4, 5, 6},
             {7, 8, 9},
             {1, 4, 7},

@@ -39,17 +39,21 @@ class GameUtils {
     static boolean checkForWinner(GameField field) {
         int[] currentStateBoard = new int[3];
         for (int i = 0; i < BotController.getWinLines().length; i++) {
+            int counter = 0;
             for (int j = 0; j < BotController.getWinLines()[i].length; j++) {
-                currentStateBoard[i] = field.getBoard()[i][j];
+                currentStateBoard[j] = field.getCellResult(BotController.getWinLines()[i][j]);
+            }
+            int firstDigitInLine = currentStateBoard[0];
+            for (int aCurrentStateBoard : currentStateBoard) {
+                if (aCurrentStateBoard == firstDigitInLine) {
+                    counter++;
+                }
+            }
+            if (counter == 3 && firstDigitInLine != 0) {
+                return true;
             }
         }
-        int counter = 0;
-        for (int aCurrentStateBoard : currentStateBoard) {
-            if (aCurrentStateBoard == 1) {
-                counter++;
-            }
-        }
-        return counter == 3;
+        return false;
     }
 
     static boolean checkForEmptySpaceOnBoard(GameField field) {
