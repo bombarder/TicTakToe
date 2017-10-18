@@ -1,8 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -48,49 +46,7 @@ class GameField {
         };
         gamePanel.setBackground(Color.WHITE);
         gamePanel.setBounds(0, 0, 300, 300);
-        gamePanel.addMouseListener(new MouseListener() {
-            public void mouseClicked(MouseEvent e) {
-                int x = e.getX();
-                int y = e.getY();
-                if (x < 100 && y < 100) {
-                    setCellResult(1);
-                } else if (x < 100 && y < 200) {
-                    setCellResult(2);
-                } else if (x < 100 && y < 300) {
-                    setCellResult(3);
-                } else if (x < 200 && y < 100) {
-                    setCellResult(4);
-                } else if (x < 200 && y < 200) {
-                    setCellResult(5);
-                } else if (x < 200 && y < 300) {
-                    setCellResult(6);
-                } else if (x < 300 && y < 100) {
-                    setCellResult(7);
-                } else if (x < 300 && y < 200) {
-                    setCellResult(8);
-                } else if (x < 300 && y < 300) {
-                    setCellResult(9);
-                }
-                gamePanel.repaint();
-                isBotTurn = true;
-            }
-
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
+        gamePanel.addMouseListener(new MouseEventImplementation(this));
         frame.add(gamePanel);
         frame.setLocation(800, 300);
         frame.setVisible(true);

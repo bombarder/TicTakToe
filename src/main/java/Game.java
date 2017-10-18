@@ -13,6 +13,7 @@ class Game {
                 field.isBotTurn = false;
                 GameUtils.beforeNextMoveChecking(field);
             }
+            field.gamePanel.repaint();
             GameUtils.beforeNextMoveChecking(field);
         }
     }
