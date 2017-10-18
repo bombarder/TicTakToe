@@ -1,7 +1,4 @@
 import javax.swing.*;
-
-import java.util.Arrays;
-
 import static javax.swing.JOptionPane.CANCEL_OPTION;
 import static javax.swing.JOptionPane.NO_OPTION;
 import static javax.swing.JOptionPane.YES_OPTION;
@@ -9,7 +6,7 @@ import static javax.swing.JOptionPane.YES_OPTION;
 class GameUtils {
 
     private static void playAgain(GameField field, String message) {
-        int test = JOptionPane.showConfirmDialog(GameField.frame, message + "Play again?");
+        int test = JOptionPane.showConfirmDialog(GameFieldGui.frame, message + "Play again?");
         switch (test) {
             case YES_OPTION:
                 field.userStep = BoardElement.ZERO.getValue();
@@ -21,18 +18,18 @@ class GameUtils {
         }
     }
 
-    static void beforeNextMoveChecking(GameField field) {
+    static void beforeNextMoveChecking(GameField field, GameFieldGui gameFieldGui) {
         if (checkForWinner(field)) {
-            field.gamePanel.repaint();
+            gameFieldGui.gamePanel.repaint();
             playAgain(field, "we have a winner!!!");
             field.setBoard(new int[3][3]);
-            field.gamePanel.repaint();
+            gameFieldGui.gamePanel.repaint();
         }
         if (!checkForEmptySpaceOnBoard(field)) {
-            field.gamePanel.repaint();
+            gameFieldGui.gamePanel.repaint();
             playAgain(field, "Game over, there is no empty space on board! ");
             field.setBoard(new int[3][3]);
-            field.gamePanel.repaint();
+            gameFieldGui.gamePanel.repaint();
         }
     }
 

@@ -1,56 +1,9 @@
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
 class GameField {
 
     private int[][] board = new int[3][3];
-
     private boolean flag;
     int userStep = BoardElement.ONE.getValue();
     boolean isBotTurn = false;
-    static JFrame frame;
-    private BufferedImage field;
-    private BufferedImage imageOfX;
-    private BufferedImage imageOfO;
-    final JPanel gamePanel;
-
-    GameField() {
-        frame = new JFrame("Tic Tac Toe");
-        frame.setSize(319, 348);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        try {
-            field = ImageIO.read(new File("src/sourceFolder/field.png"));
-            imageOfX = ImageIO.read(new File("src/sourceFolder/X.png"));
-            imageOfO = ImageIO.read(new File("src/sourceFolder/O.png"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        gamePanel = new JPanel() {
-            public void paint(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(field, 0, 0, null);
-                for (int i = 0; i < board.length; i++) {
-                    for (int j = 0; j < board[i].length; j++) {
-                        if (board[i][j] == BoardElement.ONE.getValue()) {
-                            g.drawImage(imageOfX, 100 * i + 3, 100 * j + 3, null);
-                        } else if (board[i][j] == BoardElement.TWO.getValue()) {
-                            g.drawImage(imageOfO, 100 * i + 3, 100 * j + 3, null);
-                        }
-                    }
-                }
-            }
-        };
-        gamePanel.setBackground(Color.WHITE);
-        gamePanel.setBounds(0, 0, 300, 300);
-        gamePanel.addMouseListener(new MouseEventImplementation(this));
-        frame.add(gamePanel);
-        frame.setLocation(800, 300);
-        frame.setVisible(true);
-    }
 
     void setBoard(int[][] board) {
         this.board = board;
