@@ -23,7 +23,17 @@ class GameFieldGui {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        gamePanel = new JPanel() {
+        gamePanel = getGamePanel(gameField);
+        gamePanel.setBackground(Color.WHITE);
+        gamePanel.setBounds(0, 0, 300, 300);
+        gamePanel.addMouseListener(new MouseEventImplementation(gameField));
+        frame.add(gamePanel);
+        frame.setLocation(800, 300);
+        frame.setVisible(true);
+    }
+
+    private JPanel getGamePanel(final GameField gameField) {
+        return new JPanel() {
             public void paint(Graphics g) {
                 super.paintComponent(g);
                 g.drawImage(fieldImage, 0, 0, null);
@@ -38,11 +48,5 @@ class GameFieldGui {
                 }
             }
         };
-        gamePanel.setBackground(Color.WHITE);
-        gamePanel.setBounds(0, 0, 300, 300);
-        gamePanel.addMouseListener(new MouseEventImplementation(gameField));
-        frame.add(gamePanel);
-        frame.setLocation(800, 300);
-        frame.setVisible(true);
     }
 }
