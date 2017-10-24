@@ -5,9 +5,9 @@ import static javax.swing.JOptionPane.YES_OPTION;
 
 class GameUtils {
 
-    private static void playAgain(GameField field, String message) {
-        int test = JOptionPane.showConfirmDialog(GameFieldGui.frame, message + "Play again?");
-        switch (test) {
+    static void playAgain(GameField field, String message) {
+        int result = JOptionPane.showConfirmDialog(GameFieldGui.frame, message);
+        switch (result) {
             case YES_OPTION:
                 field.userStep = BoardElement.ZERO.getValue();
                 break;
@@ -18,16 +18,20 @@ class GameUtils {
         }
     }
 
+    static void cellIsBusy(String message, String titleBar){
+        JOptionPane.showMessageDialog(null, message, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
+    }
+
     static void beforeNextMoveChecking(GameField field, GameFieldGui gameFieldGui) {
         if (checkForWinner(field)) {
             gameFieldGui.gamePanel.repaint();
-            playAgain(field, "we have a winner!!!");
+            playAgain(field, "we have a winner!!! Play again?");
             field.setBoard(new int[3][3]);
             gameFieldGui.gamePanel.repaint();
         }
         if (!checkForEmptySpaceOnBoard(field)) {
             gameFieldGui.gamePanel.repaint();
-            playAgain(field, "Game over, there is no empty space on board! ");
+            playAgain(field, "Game over, there is no empty space on board! Play again?");
             field.setBoard(new int[3][3]);
             gameFieldGui.gamePanel.repaint();
         }
