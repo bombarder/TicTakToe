@@ -1,7 +1,7 @@
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-class MouseEventImplementation implements MouseListener {
+public class MouseEventImplementation implements MouseListener {
 
     private GameField gameField;
 
