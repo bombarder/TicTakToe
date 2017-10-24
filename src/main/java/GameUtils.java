@@ -5,7 +5,7 @@ import static javax.swing.JOptionPane.YES_OPTION;
 
 class GameUtils {
 
-    static void playAgain(GameField field, String message) {
+    private static void playAgain(GameField field, String message) {
         int result = JOptionPane.showConfirmDialog(GameFieldGui.frame, message);
         switch (result) {
             case YES_OPTION:
@@ -18,8 +18,9 @@ class GameUtils {
         }
     }
 
-    static void cellIsBusy(String message, String titleBar){
-        JOptionPane.showMessageDialog(null, message, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
+    static void cellIsBusy() {
+        JOptionPane.showMessageDialog(null, "Cell is busy, choose another one!",
+                "InfoBox: " + "Warning", JOptionPane.INFORMATION_MESSAGE);
     }
 
     static void beforeNextMoveChecking(GameField field, GameFieldGui gameFieldGui) {

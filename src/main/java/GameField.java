@@ -48,9 +48,8 @@ class GameField {
     }
 
     void setCellResult(int value) {
-//        int result = getCellResult(value);
         if (getCellResult(value) != 0) {
-            GameUtils.cellIsBusy("Cell is busy, choose another one!","Warning");
+            GameUtils.cellIsBusy();
         } else {
             if (value == 1) {
                 board[0][0] = userStep;
