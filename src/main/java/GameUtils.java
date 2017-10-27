@@ -19,7 +19,8 @@ class GameUtils {
     }
 
     static void cellIsBusy() {
-        JOptionPane.showMessageDialog(GameFieldGui.frame, "Cell is busy, choose another one!");
+        JOptionPane.showMessageDialog(GameFieldGui.frame,
+                "Cell is busy, choose another one!");
     }
 
     static void beforeNextMoveChecking(GameField field, GameFieldGui gameFieldGui) {
