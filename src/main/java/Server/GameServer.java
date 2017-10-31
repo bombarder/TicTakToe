@@ -1,41 +1,62 @@
 package Server;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
-class GameServer {
+public class GameServer extends Thread {
 
-    private static ServerSocket serverSocket;
-    private static int portNumber = 4444;
-//    private static BlockingQueue clientsQueue = null;
-//    static ArrayList<ClientThread> clients;
+    private ServerSocket serverSocket;
+    private int portNumber = 2004;
+    private Socket connection = null;
+    private ObjectInputStream ois;
+    private ObjectOutputStream oos;
+    private String message;
 
-    GameServer() {
+    @Override
+    public void run() {
         try {
             serverSocket = new ServerSocket(portNumber);
-            acceptClients();
+            System.out.println("waiting for client request");
+            connection = serverSocket.accept();
+            System.out.println("Connection received from " + connection.getInetAddress().getHostName());
+            oos = new ObjectOutputStream(connection.getOutputStream());
+            oos.flush();
+            ois = new ObjectInputStream(connection.getInputStream());
+            sendMessage("Connection successful");
+            do {
+                try {
+                    message = (String) ois.readObject();
+                    System.out.println("client > " + message);
+                    if (message.equals("bye"))
+                        sendMessage("bye");
+                } catch (ClassNotFoundException classnot) {
+                    System.err.println("Data received in unknown format");
+                }
+            } while (!message.equals("bye"));
+
         } catch (IOException e) {
-            System.err.println("Could not listen on port: " + portNumber);
-            System.exit(1);
+            e.printStackTrace();
+        } finally {
+            try {
+                ois.close();
+                oos.close();
+                serverSocket.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         }
     }
 
-    private static void acceptClients() {
-//        clients = new ArrayList<ClientThread>();
-        while (true){
-            try {
-                Socket socket = serverSocket.accept();
-//                ClientThread clientThread = new ClientThread(socket);
-//                Thread thread = new Thread(clientThread);
-//                thread.start();
-//                clients.add(clientThread);
-            } catch (IOException e){
-                System.out.println("Accept failed on: " + portNumber);
-            }
+    private void sendMessage(String msg) {
+        try {
+            oos.writeObject(msg);
+            oos.flush();
+            System.out.println("server > " + msg);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
     }
 }
