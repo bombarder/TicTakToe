@@ -1,11 +1,8 @@
-import Client.Client;
-import Server.GameServer;
-
 import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        String[] options = new String[]{"Single player", "Client", "Server"};
+        String[] options = new String[]{"Single player", "client", "server"};
         int response = JOptionPane.showOptionDialog(null,
                 "Choose your game option, please", "Tic Tac Toe",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
@@ -14,12 +11,10 @@ public class Main {
             new Game().start();
         } else if (response == 1) {
 //            String ipAddress = JOptionPane.showInputDialog("Please, input your ip address:");
-            GameServer server = new GameServer();
-            Client client = new Client();
-            server.start();
-            client.start();
+//            new Client().start();
         } else if (response == 2) {
-            System.out.println("Server has chosen");
+//            new GameServer().start();
+//            System.out.println("server has chosen");
         }
     }
 }
