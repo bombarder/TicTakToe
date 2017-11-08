@@ -1,10 +1,8 @@
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 class GameServer {
 
@@ -27,18 +25,19 @@ class GameServer {
         }
     }
 
-    void acceptClients() {
-        while (true){
-            try {
-                Socket socket = serverSocket.accept();
-                ois = new ObjectInputStream(socket.getInputStream());
-                int result = (int) ois.readObject();
-                oos.writeObject(result);
-            } catch (IOException e){
-                System.out.println("Accept failed on: " + portNumber);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+    ObjectOutputStream getOos() {
+        return oos;
+    }
+
+    ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    ObjectInputStream getOis() {
+        return ois;
+    }
+
+    void setOis(ObjectInputStream ois) {
+        this.ois = ois;
     }
 }

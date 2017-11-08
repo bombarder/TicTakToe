@@ -26,9 +26,8 @@ public class Main {
             game.playWithPlayer(client);
         } else if (response == 2) {
             GameServer server = new GameServer();
-            gameFieldGui = new GameFieldGui(field, new MouseEventImplementation(field));
+            gameFieldGui = new GameFieldGui(field, new MouseEventImplementation(field, server.getOos()));
             game = new Game(field, gameFieldGui);
-            server.acceptClients();
             game.playWithServer(server);
         }
     }

@@ -1,17 +1,11 @@
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
 class Game {
     private GameField field;
     private GameFieldGui gameFieldGui;
-
-    public GameField getField() {
-        return field;
-    }
-
-    public void setField(GameField field) {
-        this.field = field;
-    }
 
     Game(GameField field, GameFieldGui gui) {
         this.field = field;
@@ -19,8 +13,6 @@ class Game {
     }
 
     void playWithBot() throws InterruptedException {
-//        field = new GameField();
-//        gameFieldGui = new GameFieldGui(field);
         BotController botController = new BotController(field);
 
         while (GameUtils.checkForEmptySpaceOnBoard(field) & !GameUtils.checkForWinner(field)) {
@@ -37,33 +29,25 @@ class Game {
     }
 
     void playWithPlayer(Client client) throws IOException {
-//        field = new GameField();
-//        Client client = new Client();
-//        gameFieldGui = new GameFieldGui(field, new MouseEventImplementation(field, client.getOut()));
-
         while (GameUtils.checkForEmptySpaceOnBoard(field) & !GameUtils.checkForWinner(field)) {
-            if (field.anotherPlayerTurn) {
-                gameFieldGui.gamePanel.repaint();
-                field.anotherPlayerTurn = false;
-                GameUtils.beforeNextMoveChecking(field, gameFieldGui);
-            }
             gameFieldGui.gamePanel.repaint();
-            field.anotherPlayerTurn = true;
             GameUtils.beforeNextMoveChecking(field, gameFieldGui);
         }
     }
 
     void playWithServer(GameServer server) throws IOException {
-//        gameFieldGui = new GameFieldGui(field, new MouseEventImplementation(field, client.getOut()));
-
         while (GameUtils.checkForEmptySpaceOnBoard(field) & !GameUtils.checkForWinner(field)) {
-            if (field.anotherPlayerTurn) {
-                gameFieldGui.gamePanel.repaint();
-                field.anotherPlayerTurn = false;
-                GameUtils.beforeNextMoveChecking(field, gameFieldGui);
+            Socket socket = server.getServerSocket().accept();
+            server.setOis(new ObjectInputStream(socket.getInputStream()));
+            int result = 0;
+            try {
+                result = (int) server.getOis().readObject();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
+            field.setCellResult(result);
+            server.getOos().writeObject(result);
             gameFieldGui.gamePanel.repaint();
-            field.anotherPlayerTurn = true;
             GameUtils.beforeNextMoveChecking(field, gameFieldGui);
         }
     }

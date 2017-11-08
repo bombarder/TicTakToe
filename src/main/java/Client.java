@@ -20,6 +20,18 @@ class Client {
         }
     }
 
+    void setOut(ObjectOutputStream out) {
+        this.out = out;
+    }
+
+    ObjectInputStream getIn() {
+        return in;
+    }
+
+    void setIn(ObjectInputStream in) {
+        this.in = in;
+    }
+
     ObjectOutputStream getOut() {
         return out;
     }
