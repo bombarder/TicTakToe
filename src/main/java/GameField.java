@@ -3,7 +3,7 @@ class GameField {
     private int[][] board = new int[3][3];
     private boolean flag;
     int userStep = BoardElement.ONE.getValue();
-    boolean isBotTurn = false;
+    boolean anotherPlayerTurn = false;
 
     void setBoard(int[][] board) {
         this.board = board;
@@ -54,39 +54,39 @@ class GameField {
             if (value == 1) {
                 board[0][0] = userStep;
                 changeUserTurn();
-                isBotTurn = true;
+                anotherPlayerTurn = true;
             } else if (value == 2) {
                 board[0][1] = userStep;
                 changeUserTurn();
-                isBotTurn = true;
+                anotherPlayerTurn = true;
             } else if (value == 3) {
                 board[0][2] = userStep;
                 changeUserTurn();
-                isBotTurn = true;
+                anotherPlayerTurn = true;
             } else if (value == 4) {
                 board[1][0] = userStep;
                 changeUserTurn();
-                isBotTurn = true;
+                anotherPlayerTurn = true;
             } else if (value == 5) {
                 board[1][1] = userStep;
                 changeUserTurn();
-                isBotTurn = true;
+                anotherPlayerTurn = true;
             } else if (value == 6) {
                 board[1][2] = userStep;
                 changeUserTurn();
-                isBotTurn = true;
+                anotherPlayerTurn = true;
             } else if (value == 7) {
                 board[2][0] = userStep;
                 changeUserTurn();
-                isBotTurn = true;
+                anotherPlayerTurn = true;
             } else if (value == 8) {
                 board[2][1] = userStep;
                 changeUserTurn();
-                isBotTurn = true;
+                anotherPlayerTurn = true;
             } else if (value == 9) {
                 board[2][2] = userStep;
                 changeUserTurn();
-                isBotTurn = true;
+                anotherPlayerTurn = true;
             }
         }
     }

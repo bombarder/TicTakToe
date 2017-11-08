@@ -32,6 +32,26 @@ class GameFieldGui {
         frame.setVisible(true);
     }
 
+    GameFieldGui(final GameField gameField, MouseEventImplementation mouseEventImplementation) {
+        frame = new JFrame("Tic Tac Toe");
+        frame.setSize(319, 348);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        try {
+            fieldImage = ImageIO.read(new File("src/sourceFolder/field.png"));
+            imageOfX = ImageIO.read(new File("src/sourceFolder/X.png"));
+            imageOfO = ImageIO.read(new File("src/sourceFolder/O.png"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        gamePanel = getGamePanel(gameField);
+        gamePanel.setBackground(Color.WHITE);
+        gamePanel.setBounds(0, 0, 300, 300);
+        gamePanel.addMouseListener(mouseEventImplementation);
+        frame.add(gamePanel);
+        frame.setLocation(800, 300);
+        frame.setVisible(true);
+    }
+
     private JPanel getGamePanel(final GameField gameField) {
         return new JPanel() {
             public void paint(Graphics g) {

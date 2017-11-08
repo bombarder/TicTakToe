@@ -4,15 +4,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
-public class GameServer implements ClientServerInteraction {
+class GameServer {
 
     private ServerSocket serverSocket;
     private int portNumber = 2004;
     private Socket connection = null;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
-    private String message;
 
     GameServer() {
         try {
@@ -27,19 +27,18 @@ public class GameServer implements ClientServerInteraction {
         }
     }
 
-    @Override
-    public int send(int output) throws IOException {
-        oos.flush();
-        oos.writeObject("Bye Bye");
-        oos.flush();
-        oos.close();
-        return 0;
-    }
-
-    @Override
-    public void receive(int input) throws IOException, ClassNotFoundException {
-        message = (String) ois.readObject();
-        System.out.println("client > " + message);
-        ois.close();
+    void acceptClients() {
+        while (true){
+            try {
+                Socket socket = serverSocket.accept();
+                ois = new ObjectInputStream(socket.getInputStream());
+                int result = (int) ois.readObject();
+                oos.writeObject(result);
+            } catch (IOException e){
+                System.out.println("Accept failed on: " + portNumber);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

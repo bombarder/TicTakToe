@@ -3,11 +3,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class Client implements ClientServerInteraction {
+class Client {
     private Socket clientSocket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    private String message;
 
     Client() {
         try {
@@ -21,22 +20,8 @@ public class Client implements ClientServerInteraction {
         }
     }
 
-    @Override
-    public int send(int output) throws IOException {
-        try {
-            out.writeObject("Hi");
-            out.flush();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
-        return 0;
-    }
-
-    @Override
-    public void receive(int input) throws IOException, ClassNotFoundException {
-        message = (String) in.readObject();
-        System.out.println(" server> " + message);
-        message = "bye";
+    ObjectOutputStream getOut() {
+        return out;
     }
 }
 
