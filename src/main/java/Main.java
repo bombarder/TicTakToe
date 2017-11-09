@@ -20,13 +20,13 @@ public class Main {
             game.playWithBot();
         } else if (response == 1) {
             Client client = new Client();
-            gameFieldGui = new GameFieldGui(field, new MouseEventImplementation(field, client.getOut()));
+            gameFieldGui = new GameFieldGui(field, new MouseEventImplementation(field, client.getToServer()));
             game = new Game(field, gameFieldGui);
 //            String ipAddress = JOptionPane.showInputDialog("Please, input your ip address:");
             game.playWithPlayer(client);
         } else if (response == 2) {
             GameServer server = new GameServer();
-            gameFieldGui = new GameFieldGui(field, new MouseEventImplementation(field, server.getOos()));
+            gameFieldGui = new GameFieldGui(field, new MouseEventImplementation(field, server.getOutputToClient()));
             game = new Game(field, gameFieldGui);
             game.playWithServer(server);
         }

@@ -9,8 +9,8 @@ class GameServer {
     private ServerSocket serverSocket;
     private int portNumber = 2004;
     private Socket connection = null;
-    private ObjectInputStream ois;
-    private ObjectOutputStream oos;
+    private ObjectInputStream inputFromClient;
+    private ObjectOutputStream outputToClient;
 
     GameServer() {
         try {
@@ -18,26 +18,26 @@ class GameServer {
             System.out.println("waiting for client request");
             connection = serverSocket.accept();
             System.out.println("Connection received from " + connection.getInetAddress().getHostName());
-            oos = new ObjectOutputStream(connection.getOutputStream());
-            ois = new ObjectInputStream(connection.getInputStream());
+            outputToClient = new ObjectOutputStream(connection.getOutputStream());
+            inputFromClient = new ObjectInputStream(connection.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    ObjectOutputStream getOos() {
-        return oos;
+    ObjectOutputStream getOutputToClient() {
+        return outputToClient;
     }
 
     ServerSocket getServerSocket() {
         return serverSocket;
     }
 
-    ObjectInputStream getOis() {
-        return ois;
+    ObjectInputStream getInputFromClient() {
+        return inputFromClient;
     }
 
-    void setOis(ObjectInputStream ois) {
-        this.ois = ois;
+    void setInputFromClient(ObjectInputStream inputFromClient) {
+        this.inputFromClient = inputFromClient;
     }
 }

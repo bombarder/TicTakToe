@@ -5,35 +5,35 @@ import java.net.Socket;
 
 class Client {
     private Socket clientSocket;
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
+    private ObjectOutputStream toServer;
+    private ObjectInputStream fromServer;
 
     Client() {
         try {
             clientSocket = new Socket("localhost", 2004);
-            System.out.println("Connected to localhost in port 2004");
-            out = new ObjectOutputStream(clientSocket.getOutputStream());
-            out.flush();
-            in = new ObjectInputStream(clientSocket.getInputStream());
+            System.out.println("Connected to localhost fromServer port 2004");
+            toServer = new ObjectOutputStream(clientSocket.getOutputStream());
+            toServer.flush();
+            fromServer = new ObjectInputStream(clientSocket.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    void setOut(ObjectOutputStream out) {
-        this.out = out;
+    void setToServer(ObjectOutputStream toServer) {
+        this.toServer = toServer;
     }
 
-    ObjectInputStream getIn() {
-        return in;
+    ObjectInputStream getFromServer() {
+        return fromServer;
     }
 
-    void setIn(ObjectInputStream in) {
-        this.in = in;
+    void setFromServer(ObjectInputStream fromServer) {
+        this.fromServer = fromServer;
     }
 
-    ObjectOutputStream getOut() {
-        return out;
+    ObjectOutputStream getToServer() {
+        return toServer;
     }
 }
 
