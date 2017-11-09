@@ -1,6 +1,4 @@
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
 class Game {
@@ -29,17 +27,23 @@ class Game {
     }
 
     void playWithPlayer(Client client) throws IOException {
+        int result = 0;
         while (GameUtils.checkForEmptySpaceOnBoard(field) & !GameUtils.checkForWinner(field)) {
+            try {
+                result = (int)client.getIn().readObject();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            field.setCellResult(result);
             gameFieldGui.gamePanel.repaint();
             GameUtils.beforeNextMoveChecking(field, gameFieldGui);
+            System.out.println("Client moved");
         }
     }
 
     void playWithServer(GameServer server) throws IOException {
+        int result = 0;
         while (GameUtils.checkForEmptySpaceOnBoard(field) & !GameUtils.checkForWinner(field)) {
-            Socket socket = server.getServerSocket().accept();
-            server.setOis(new ObjectInputStream(socket.getInputStream()));
-            int result = 0;
             try {
                 result = (int) server.getOis().readObject();
             } catch (ClassNotFoundException e) {
@@ -49,6 +53,7 @@ class Game {
             server.getOos().writeObject(result);
             gameFieldGui.gamePanel.repaint();
             GameUtils.beforeNextMoveChecking(field, gameFieldGui);
+            System.out.println("Server moved");
         }
     }
 }
