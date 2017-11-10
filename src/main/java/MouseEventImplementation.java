@@ -7,6 +7,7 @@ public class MouseEventImplementation implements MouseListener {
 
     private GameField gameField;
     private ObjectOutputStream outputStream;
+    private GameFieldGui gui;
 
     MouseEventImplementation(GameField field, ObjectOutputStream out) {
         gameField = field;
@@ -43,6 +44,7 @@ public class MouseEventImplementation implements MouseListener {
             move = 9;
         }
         gameField.setCellResult(move);
+        gui.gamePanel.repaint();
         try {
             outputStream.writeObject(move);
             outputStream.flush();
@@ -69,5 +71,9 @@ public class MouseEventImplementation implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    public void setGui(GameFieldGui gui) {
+        this.gui = gui;
     }
 }

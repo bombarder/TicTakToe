@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -28,39 +27,34 @@ class Game {
     }
 
     void playWithPlayer(Client client) throws IOException {
-        if (field.anotherPlayerTurn) {
-            int result = 0;
+        int result = 0;
+        while (true){
+//            gameFieldGui.gamePanel.repaint();
             try {
                 result = (int) client.getFromServer().readObject();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
             field.setCellResult(result);
-            field.anotherPlayerTurn = false;
 //            GameUtils.beforeNextMoveChecking(field, gameFieldGui);
             gameFieldGui.gamePanel.repaint();
-        } else {
-            JOptionPane.showInputDialog("Not yur turn");
+            System.out.println("Client moved");
         }
     }
 
     void playWithServer(GameServer server) throws IOException {
         int result = 0;
         while (true) {
-            if (!field.anotherPlayerTurn) {
-                try {
-                    result = (int) server.getInputFromClient().readObject();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-                field.setCellResult(result);
-                field.anotherPlayerTurn = true;
-                gameFieldGui.gamePanel.repaint();
-//            GameUtils.beforeNextMoveChecking(field, gameFieldGui);
-                System.out.println("Server moved");
-            } else {
-                JOptionPane.showInputDialog("Not yur turn");
+//            gameFieldGui.gamePanel.repaint();
+            try {
+                result = (int) server.getInputFromClient().readObject();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
+            field.setCellResult(result);
+            gameFieldGui.gamePanel.repaint();
+//            GameUtils.beforeNextMoveChecking(field, gameFieldGui);
+            System.out.println("Server moved");
         }
     }
 }

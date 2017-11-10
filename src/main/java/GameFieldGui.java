@@ -50,6 +50,7 @@ class GameFieldGui {
         frame.add(gamePanel);
         frame.setLocation(800, 300);
         frame.setVisible(true);
+        mouseEventImplementation.setGui(this);
     }
 
     private JPanel getGamePanel(final GameField gameField) {
