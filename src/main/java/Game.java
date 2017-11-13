@@ -28,8 +28,8 @@ class Game {
 
     void playWithPlayer(Client client) throws IOException {
         int result = 0;
-        while (true){
-//            gameFieldGui.gamePanel.repaint();
+        while (GameUtils.checkForEmptySpaceOnBoard(field) & !GameUtils.checkForWinner(field)){
+            gameFieldGui.gamePanel.repaint();
             try {
                 result = (int) client.getFromServer().readObject();
             } catch (ClassNotFoundException e) {
@@ -44,16 +44,16 @@ class Game {
 
     void playWithServer(GameServer server) throws IOException {
         int result = 0;
-        while (true) {
-//            gameFieldGui.gamePanel.repaint();
+        while (GameUtils.checkForEmptySpaceOnBoard(field) & !GameUtils.checkForWinner(field)) {
+            gameFieldGui.gamePanel.repaint();
             try {
                 result = (int) server.getInputFromClient().readObject();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
             field.setCellResult(result);
-            gameFieldGui.gamePanel.repaint();
 //            GameUtils.beforeNextMoveChecking(field, gameFieldGui);
+            gameFieldGui.gamePanel.repaint();
             System.out.println("Server moved");
         }
     }
