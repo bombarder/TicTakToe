@@ -1,3 +1,5 @@
+package main;
+
 public enum BoardElement {
     ZERO(0),
     ONE(1),

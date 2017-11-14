@@ -1,18 +1,21 @@
-import javax.imageio.ImageIO;
-import javax.swing.*;
+package main;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-class GameFieldGui {
+import javax.imageio.ImageIO;
+import javax.swing.*;
+
+public class GameFieldGui {
     private BufferedImage fieldImage;
     private BufferedImage imageOfX;
     private BufferedImage imageOfO;
-    final JPanel gamePanel;
+    public final JPanel gamePanel;
     static JFrame frame;
 
-    GameFieldGui(final GameField gameField) {
+    public GameFieldGui(final GameField gameField) {
         frame = new JFrame("Tic Tac Toe");
         frame.setSize(319, 348);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -32,7 +35,7 @@ class GameFieldGui {
         frame.setVisible(true);
     }
 
-    GameFieldGui(final GameField gameField, MouseEventImplementation mouseEventImplementation) {
+    public GameFieldGui(final GameField gameField, MouseEventImplementation mouseEventImplementation) {
         frame = new JFrame("Tic Tac Toe");
         frame.setSize(319, 348);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

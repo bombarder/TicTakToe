@@ -1,9 +1,12 @@
+package main;
+
 import javax.swing.*;
+
 import static javax.swing.JOptionPane.CANCEL_OPTION;
 import static javax.swing.JOptionPane.NO_OPTION;
 import static javax.swing.JOptionPane.YES_OPTION;
 
-class GameUtils {
+public class GameUtils {
 
     private static void playAgain(GameField field, String message) {
         int result = JOptionPane.showConfirmDialog(GameFieldGui.frame, message);
@@ -20,10 +23,10 @@ class GameUtils {
 
     static void cellIsBusy() {
         JOptionPane.showMessageDialog(GameFieldGui.frame,
-                "Cell is busy, choose another one!");
+            "Cell is busy, choose another one!");
     }
 
-    static void beforeNextMoveChecking(GameField field, GameFieldGui gameFieldGui) {
+    public static void beforeNextMoveChecking(GameField field, GameFieldGui gameFieldGui) {
         if (checkForWinner(field)) {
             gameFieldGui.gamePanel.repaint();
             playAgain(field, "we have a winner!!! Play again?");
@@ -32,13 +35,13 @@ class GameUtils {
         }
         if (!checkForEmptySpaceOnBoard(field)) {
             gameFieldGui.gamePanel.repaint();
-            playAgain(field, "Game over, there is no empty space on board! Play again?");
+            playAgain(field, "main.game.Game over, there is no empty space on board! Play again?");
             field.setBoard(new int[3][3]);
             gameFieldGui.gamePanel.repaint();
         }
     }
 
-    static boolean checkForWinner(GameField field) {
+    public static boolean checkForWinner(GameField field) {
         int[] currentStateBoard = new int[3];
         for (int i = 0; i < BotController.getWinLines().length; i++) {
             int counter = 0;
@@ -58,7 +61,7 @@ class GameUtils {
         return false;
     }
 
-    static boolean checkForEmptySpaceOnBoard(GameField field) {
+    public static boolean checkForEmptySpaceOnBoard(GameField field) {
         for (int[] aBoard : field.getBoard()) {
             for (int anABoard : aBoard) {
                 if (anABoard == BoardElement.ZERO.getValue()) {

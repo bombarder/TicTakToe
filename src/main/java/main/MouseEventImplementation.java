@@ -1,3 +1,5 @@
+package main;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -9,12 +11,12 @@ public class MouseEventImplementation implements MouseListener {
     private ObjectOutputStream outputStream;
     private GameFieldGui gui;
 
-    MouseEventImplementation(GameField field, ObjectOutputStream out) {
+    public MouseEventImplementation(GameField field, ObjectOutputStream out) {
         gameField = field;
         outputStream = out;
     }
 
-    MouseEventImplementation(GameField field) {
+    public MouseEventImplementation(GameField field) {
         gameField = field;
     }
 

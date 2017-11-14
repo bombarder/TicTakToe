@@ -1,9 +1,11 @@
-class GameField {
+package main;
+
+public class GameField {
 
     private int[][] board = new int[3][3];
     private boolean flag;
     int userStep = BoardElement.ONE.getValue();
-    boolean anotherPlayerTurn = false;
+    public boolean anotherPlayerTurn = false;
 
     void setBoard(int[][] board) {
         this.board = board;
@@ -23,7 +25,7 @@ class GameField {
         }
     }
 
-    int getCellResult(int value) {
+    public int getCellResult(int value) {
         if (value == 1) {
             return board[0][0];
         } else if (value == 2) {
@@ -47,7 +49,7 @@ class GameField {
         }
     }
 
-    void setCellResult(int value) {
+    public void setCellResult(int value) {
         if (getCellResult(value) != 0) {
             GameUtils.cellIsBusy();
         } else {

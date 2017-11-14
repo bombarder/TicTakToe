@@ -1,10 +1,12 @@
+package main;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-class GameServer {
+public class Server {
 
     private ServerSocket serverSocket;
     private int portNumber = 2004;
@@ -12,7 +14,7 @@ class GameServer {
     private ObjectInputStream inputFromClient;
     private ObjectOutputStream outputToClient;
 
-    GameServer() {
+    Server() {
         try {
             serverSocket = new ServerSocket(portNumber);
             System.out.println("waiting for client request");
@@ -25,7 +27,7 @@ class GameServer {
         }
     }
 
-    ObjectOutputStream getOutputToClient() {
+    public ObjectOutputStream getOutputToClient() {
         return outputToClient;
     }
 
@@ -33,7 +35,7 @@ class GameServer {
         return serverSocket;
     }
 
-    ObjectInputStream getInputFromClient() {
+    public ObjectInputStream getInputFromClient() {
         return inputFromClient;
     }
 

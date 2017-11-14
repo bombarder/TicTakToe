@@ -1,24 +1,26 @@
+package main;
+
 import java.util.Arrays;
 import java.util.Random;
 
-class BotController {
+public class BotController {
 
     private GameField field;
     private boolean moveUserState;
     private final static Random random = new Random();
 
     private final static int[][] winLines = {
-            {1, 2, 3},
-            {4, 5, 6},
-            {7, 8, 9},
-            {1, 4, 7},
-            {2, 5, 8},
-            {3, 6, 9},
-            {1, 5, 9},
-            {3, 5, 7}
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9},
+        {1, 4, 7},
+        {2, 5, 8},
+        {3, 6, 9},
+        {1, 5, 9},
+        {3, 5, 7}
     };
 
-    BotController(GameField field) {
+    public BotController(GameField field) {
         this.field = field;
     }
 
@@ -34,7 +36,7 @@ class BotController {
         field.setCellResult(cell);
     }
 
-    void generateSmartMove() {
+    public void generateSmartMove() {
         moveUserState = false;
         for (int i = 0; i < winLines.length && !moveUserState; i++) {
             checkLineForEqualsTwoElements(winLines[i]);

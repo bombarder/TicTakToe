@@ -1,9 +1,11 @@
+package main;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-class Client {
+public class Client {
     private Socket clientSocket;
     private ObjectOutputStream toServer;
     private ObjectInputStream fromServer;
@@ -24,7 +26,7 @@ class Client {
         this.toServer = toServer;
     }
 
-    ObjectInputStream getFromServer() {
+    public ObjectInputStream getFromServer() {
         return fromServer;
     }
 
@@ -32,7 +34,7 @@ class Client {
         this.fromServer = fromServer;
     }
 
-    ObjectOutputStream getToServer() {
+    public ObjectOutputStream getOutputToServer() {
         return toServer;
     }
 }
